@@ -5,10 +5,10 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-const dmsExecCommand = "t"
+const executeDmsCommand = "t"
 
-// DMSExecPayload contains data required to execute an DMS transaction.
-type DMSExecPayload struct {
+// ExecuteDMSPayload contains data required to execute an DMS transaction.
+type ExecuteDMSPayload struct {
 	// ID of the transaction. 28 symbols in base64
 	TransactionId string `url:"trans_id"`
 
@@ -28,9 +28,9 @@ type DMSExecPayload struct {
 	Description string `url:"description,omitempty"`
 }
 
-// DMSExecResult contains data returned on execution of an DMS transaction,
+// ExecuteDMSResult contains data returned on execution of an DMS transaction,
 // if no error is encountered.
-type DMSExecResult struct {
+type ExecuteDMSResult struct {
 	// Transaction result status.
 	Result resultEnum `mapstructure:"RESULT"`
 
@@ -47,9 +47,9 @@ type DMSExecResult struct {
 	CardNumber string `mapstructure:"CARD_NUMBER"`
 }
 
-// ExecuteDMS executes a DMS transaction (-t) after it was created with [ECommClient.AuthorizeDMS] (-a),
-// and checked with [ECommClient.FetchStatus] (-c).
-func (c *ECommClient) ExecuteDMS(payload DMSExecPayload) (*DMSExecResult, error) {
+// ExecuteDMS executes a DMS transaction (-t) after it was created with [ECommClient.RegisterTransaction] (-a),
+// and checked with [ECommClient.TransactionStatus] (-c).
+func (c *ECommClient) ExecuteDMS(payload ExecuteDMSPayload) (*ExecuteDMSResult, error) {
 	// Validate payload
 	if !isValidTransactionID(payload.TransactionId) {
 		return nil, errMalformedTransactionID
@@ -71,11 +71,11 @@ func (c *ECommClient) ExecuteDMS(payload DMSExecPayload) (*DMSExecResult, error)
 	if err != nil {
 		return nil, err
 	}
-	res, err := c.send(dmsExecCommand, payloadValues.Encode())
+	res, err := c.send(executeDmsCommand, payloadValues.Encode())
 	if err != nil {
 		return nil, err
 	}
-	result := &DMSExecResult{}
+	result := &ExecuteDMSResult{}
 	err = mapstructure.Decode(&res, &result)
 	if err != nil {
 		return nil, err

@@ -20,7 +20,7 @@ type ReversePayload struct {
 
 	// A flag indicating that a transaction is being reversed because of suspected fraud.
 	// If this parameter is used, only full reversals are allowed.
-	SuspectedFraud bool `url:"suspected_fraud,omitempty"`
+	SuspectedFraud bool `url:"-"`
 }
 
 // ReverseResult contains data returned on reversal of a transaction,

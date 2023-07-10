@@ -15,24 +15,27 @@ var (
 	ErrParse = errors.New("couldn't parse response")
 )
 
-type malformedFieldEnum string
+type malformedInputEnum string
 
-// malformedFieldEnum contains the names of the fields that can
+// malformedInputEnum contains the names of the parameters and payload fields that can
 // fail validation, and thus will be returned in [ErrMalformedPayload]
 const (
-	FieldTransactionId   malformedFieldEnum = "trans_id"
-	FieldAmount          malformedFieldEnum = "amount"
-	FieldCurrency        malformedFieldEnum = "currency"
-	FieldClientIpAddress malformedFieldEnum = "client_ip_addr"
-	FieldDescription     malformedFieldEnum = "description"
-	FieldLanguage        malformedFieldEnum = "language"
+	FieldTransactionId   malformedInputEnum = "trans_id"
+	FieldAmount          malformedInputEnum = "amount"
+	FieldCurrency        malformedInputEnum = "currency"
+	FieldClientIpAddress malformedInputEnum = "client_ip_addr"
+	FieldDescription     malformedInputEnum = "description"
+	FieldLanguage        malformedInputEnum = "language"
+	FieldBillerClientId  malformedInputEnum = "biller_client_id"
+	FieldPerspayeeExpiry malformedInputEnum = "prespayee_expiry"
+	FieldTransactionType malformedInputEnum = "transaction_type"
 )
 
 // ErrMalformedPayload is triggered before sending the request
 // to MAIB EComm, if an error was encountered in payload input.
 type ErrMalformedPayload struct {
 	// Which field is malformed
-	Field malformedFieldEnum
+	Field malformedInputEnum
 
 	// Human-readable explanation of the requirements
 	Description string
@@ -67,5 +70,17 @@ var (
 	errMalformedLanguage = ErrMalformedPayload{
 		Field:       FieldLanguage,
 		Description: "either 0 or more than 32 characters",
+	}
+	errMalformedBillerClientID = ErrMalformedPayload{
+		Field:       FieldBillerClientId,
+		Description: "either 0 or more than 49 characters",
+	}
+	errMalformedPerspayeeExpiry = ErrMalformedPayload{
+		Field:       FieldPerspayeeExpiry,
+		Description: "not 4 digits in MMYY format",
+	}
+	errMalformedTransactionType = ErrMalformedPayload{
+		Field:       FieldTransactionType,
+		Description: "not SMS or DMS",
 	}
 )

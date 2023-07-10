@@ -16,7 +16,7 @@ type StatusPayload struct {
 	ClientIpAddress string `url:"client_ip_addr"`
 }
 
-// StatusResult contains data returned on execution of a status request (-c),
+// StatusResult contains data returned by transaction status request (-c),
 // if no error is encountered.
 type StatusResult struct {
 	// Transaction result status.
@@ -56,8 +56,8 @@ type StatusResult struct {
 	RecurringPaymentExpiry string `mapstructure:"RECC_PMNT_EXPIRY"`
 }
 
-// FetchStatus returns the status of a transaction (-c).
-func (c *ECommClient) FetchStatus(payload StatusPayload) (*StatusResult, error) {
+// TransactionStatus returns the status of a transaction (-c).
+func (c *ECommClient) TransactionStatus(payload StatusPayload) (*StatusResult, error) {
 	// Validate payload
 	if !isValidTransactionID(payload.TransactionId) {
 		return nil, errMalformedTransactionID

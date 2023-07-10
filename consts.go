@@ -1,5 +1,20 @@
 package maib
 
+type transactionTypeEnum uint8
+
+// transactionTypeEnum holds EComm transaction types
+const (
+	// SMS (Single Message System) transaction.
+	// A single transaction that allows you to transfer money from the client's account.
+	SMS transactionTypeEnum = iota
+
+	// DMS (Dual Message System) transaction.
+	// Debiting from the client's card occurs in two stages:
+	// 1: Authorization (the funds on the client's card are blocked);
+	// 2: Execution.
+	DMS
+)
+
 type currencyEnum uint16
 
 // currencyEnum holds ISO4217 codes for currencies.
