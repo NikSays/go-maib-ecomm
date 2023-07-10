@@ -1,8 +1,8 @@
 package maib
 
-// currencyEnum holds ISO4217 codes for currencies.
 type currencyEnum uint16
 
+// currencyEnum holds ISO4217 codes for currencies.
 const (
 	// CurrencyMDL is ISO4217 code for Moldovan Lei.
 	CurrencyMDL currencyEnum = 498
@@ -14,9 +14,9 @@ const (
 	CurrencyUSD currencyEnum = 840
 )
 
-// languageEnum holds 2 letter language identifiers.
 type languageEnum string
 
+// languageEnum holds 2 letter language identifiers.
 const (
 	// LanguageRomanian language identifier.
 	LanguageRomanian languageEnum = "ro"
@@ -28,9 +28,9 @@ const (
 	LanguageEnglish languageEnum = "en"
 )
 
-// resultEnum holds possible values for RESULT field in response from MAIB EComm system.
 type resultEnum string
 
+// resultEnum holds possible values for RESULT field in response from MAIB EComm system.
 const (
 	// ResultOk - the transaction is successfully completed.
 	ResultOk resultEnum = "OK"
@@ -57,9 +57,9 @@ const (
 	ResultTimeout resultEnum = "TIMEOUT"
 )
 
-// resultPSEnum holds possible values for RESULT_PS field in response from MAIB EComm system.
 type resultPSEnum string
 
+// resultPSEnum holds possible values for RESULT_PS field in response from MAIB EComm system.
 const (
 	// ResultPSActive - the transaction was registered and payment is not completed yet.
 	ResultPSActive resultPSEnum = "ACTIVE"

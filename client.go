@@ -15,7 +15,7 @@ type ECommClient struct {
 	merchantHandlerEndpoint string
 }
 
-// Config is the configuration required to set up a ECommClient.
+// Config is the configuration required to set up a [ECommClient].
 type Config struct {
 	// Path to .pfx certificate issued by MAIB.
 	PFXPath string
@@ -25,7 +25,7 @@ type Config struct {
 	MerchantHandlerEndpoint string
 }
 
-// NewClient creates a new ECommClient.
+// NewClient creates a new [ECommClient].
 func NewClient(config Config) (*ECommClient, error) {
 	// Read pfx certificate
 	pfxBytes, err := os.ReadFile(config.PFXPath)

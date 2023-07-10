@@ -37,7 +37,7 @@ type SMSResult struct {
 }
 
 // RegisterSMS executes a new SMS transaction (-v).
-// The resulting transaction should be confirmed with FetchStatus (-c).
+// The resulting transaction should be confirmed with [ECommClient.FetchStatus] (-c).
 func (c *ECommClient) RegisterSMS(payload SMSPayload) (*SMSResult, error) {
 	// Validate payload
 	if !isValidAmount(payload.Amount) {
@@ -55,7 +55,7 @@ func (c *ECommClient) RegisterSMS(payload SMSPayload) (*SMSResult, error) {
 	if !isValidLanguage(string(payload.Language)) {
 		return nil, errMalformedLanguage
 	}
-
+	// Send command
 	payloadValues, err := query.Values(payload)
 	if err != nil {
 		return nil, err

@@ -42,14 +42,15 @@ func (c *ECommClient) ReverseTransaction(payload ReversePayload) (*ReverseResult
 	if !isValidAmount(payload.Amount) {
 		return nil, errMalformedAmount
 	}
-
 	payloadValues, err := query.Values(payload)
 	if err != nil {
 		return nil, err
 	}
+	// Parse true as 'yes'
 	if payload.SuspectedFraud {
 		payloadValues.Set("suspected_fraud", "yes")
 	}
+	// Send command
 	res, err := c.send(reverseCommand, payloadValues.Encode())
 	if err != nil {
 		return nil, err

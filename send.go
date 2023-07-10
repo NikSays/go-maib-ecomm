@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// parseField returns int or string value depending on the key
 func parseField(key string, value string) (any, error) {
 	switch key {
 	case

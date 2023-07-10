@@ -36,8 +36,8 @@ type DMSAuthResult struct {
 	TransactionId string `mapstructure:"TRANSACTION_ID"`
 }
 
-// AuthorizeDMS creates a new DMS transaction (-a). The resulting transaction should be confirmed with FetchStatus (-c),
-// and executed with ExecuteDMS (-t).
+// AuthorizeDMS creates a new DMS transaction (-a). The resulting transaction should be
+// confirmed with [ECommClient.FetchStatus] (-c), and executed with [ECommClient.ExecuteDMS] (-t).
 func (c *ECommClient) AuthorizeDMS(payload DMSAuthPayload) (*DMSAuthResult, error) {
 	// Validate payload
 	if !isValidAmount(payload.Amount) {
@@ -55,7 +55,7 @@ func (c *ECommClient) AuthorizeDMS(payload DMSAuthPayload) (*DMSAuthResult, erro
 	if !isValidLanguage(string(payload.Language)) {
 		return nil, errMalformedLanguage
 	}
-
+	// Send command
 	payloadValues, err := query.Values(payload)
 	if err != nil {
 		return nil, err

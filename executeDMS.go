@@ -47,8 +47,8 @@ type DMSExecResult struct {
 	CardNumber string `mapstructure:"CARD_NUMBER"`
 }
 
-// ExecuteDMS executes a DMS transaction (-t) after it was created with AuthorizeDMS (-a),
-// and checked with FetchStatus (-c).
+// ExecuteDMS executes a DMS transaction (-t) after it was created with [ECommClient.AuthorizeDMS] (-a),
+// and checked with [ECommClient.FetchStatus] (-c).
 func (c *ECommClient) ExecuteDMS(payload DMSExecPayload) (*DMSExecResult, error) {
 	// Validate payload
 	if !isValidTransactionID(payload.TransactionId) {
@@ -66,7 +66,7 @@ func (c *ECommClient) ExecuteDMS(payload DMSExecPayload) (*DMSExecResult, error)
 	if !isValidDescription(payload.Description) {
 		return nil, errMalformedDescription
 	}
-
+	// Send command
 	payloadValues, err := query.Values(payload)
 	if err != nil {
 		return nil, err

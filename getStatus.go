@@ -65,7 +65,7 @@ func (c *ECommClient) FetchStatus(payload StatusPayload) (*StatusResult, error) 
 	if !isValidClientIpAddress(payload.ClientIpAddress) {
 		return nil, errMalformedClientIP
 	}
-
+	// Send command
 	payloadValues, err := query.Values(payload)
 	if err != nil {
 		return nil, err
