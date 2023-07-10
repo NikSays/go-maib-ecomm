@@ -15,8 +15,26 @@ var (
 	ErrParse = errors.New("couldn't parse response")
 )
 
+type malformedFieldEnum string
+
+// malformedFieldEnum contains the names of the fields that can
+// fail validation, and thus will be returned in [ErrMalformedPayload]
+const (
+	FieldTransactionId   malformedFieldEnum = "trans_id"
+	FieldAmount          malformedFieldEnum = "amount"
+	FieldCurrency        malformedFieldEnum = "currency"
+	FieldClientIpAddress malformedFieldEnum = "client_ip_addr"
+	FieldDescription     malformedFieldEnum = "description"
+	FieldLanguage        malformedFieldEnum = "language"
+)
+
+// ErrMalformedPayload is triggered before sending the request
+// to MAIB EComm, if an error was encountered in payload input.
 type ErrMalformedPayload struct {
-	Field       string
+	// Which field is malformed
+	Field malformedFieldEnum
+
+	// Human-readable explanation of the requirements
 	Description string
 }
 
@@ -24,30 +42,30 @@ func (e ErrMalformedPayload) Error() string {
 	return fmt.Sprintf("malformed field %s (%s)", e.Field, e.Description)
 }
 
-// Errors encountered in payload input.
+// For internal use, since the same descriptions are repeated
 var (
 	errMalformedTransactionID = ErrMalformedPayload{
-		Field:       "TransactionID",
+		Field:       FieldTransactionId,
 		Description: "not 28 characters in base64",
 	}
 	errMalformedAmount = ErrMalformedPayload{
-		Field:       "Amount",
+		Field:       FieldAmount,
 		Description: "either 0 or more than 12 digits",
 	}
 	errMalformedCurrency = ErrMalformedPayload{
-		Field:       "Currency",
+		Field:       FieldCurrency,
 		Description: "invalid ISO 4217 3-number code",
 	}
 	errMalformedClientIP = ErrMalformedPayload{
-		Field:       "ClientIPAddress",
+		Field:       FieldClientIpAddress,
 		Description: "invalid IP address",
 	}
 	errMalformedDescription = ErrMalformedPayload{
-		Field:       "Description",
+		Field:       FieldDescription,
 		Description: "more than 125 characters",
 	}
 	errMalformedLanguage = ErrMalformedPayload{
-		Field:       "Language",
+		Field:       FieldLanguage,
 		Description: "either 0 or more than 32 characters",
 	}
 )
