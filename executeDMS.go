@@ -17,9 +17,9 @@ type ExecuteDMSPayload struct {
 	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from the client's card.
 	Amount uint `url:"amount"`
 
-	// Transaction currencyEnum.
+	// Transaction CurrencyEnum.
 	// One of: CurrencyMDL, CurrencyEUR, CurrencyUSD.
-	Currency currencyEnum `url:"currency"`
+	Currency CurrencyEnum `url:"currency"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
 	ClientIpAddress string `url:"client_ip_addr"`
@@ -32,7 +32,7 @@ type ExecuteDMSPayload struct {
 // if no error is encountered.
 type ExecuteDMSResult struct {
 	// Transaction result status.
-	Result resultEnum `mapstructure:"RESULT"`
+	Result ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`

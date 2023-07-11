@@ -17,7 +17,7 @@ type DeleteRecurringPayload struct {
 // if no error is encountered.
 type DeleteRecurringResult struct {
 	// Transaction result status.
-	Result resultEnum `mapstructure:"RESULT"`
+	Result ResultEnum `mapstructure:"RESULT"`
 }
 
 // DeleteRecurring deletes a recurring transaction (-x).

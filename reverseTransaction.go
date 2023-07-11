@@ -27,7 +27,7 @@ type ReversePayload struct {
 // if no error is encountered.
 type ReverseResult struct {
 	// Transaction result status.
-	Result resultEnum `mapstructure:"RESULT"`
+	Result ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`

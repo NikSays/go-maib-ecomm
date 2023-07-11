@@ -20,10 +20,10 @@ type StatusPayload struct {
 // if no error is encountered.
 type StatusResult struct {
 	// Transaction result status.
-	Result resultEnum `mapstructure:"RESULT"`
+	Result ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result, Payment Server interpretation.
-	ResultPs resultPSEnum `mapstructure:"RESULT_PS"`
+	ResultPs ResultPSEnum `mapstructure:"RESULT_PS"`
 
 	// Transaction resul code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`

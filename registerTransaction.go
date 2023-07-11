@@ -15,9 +15,9 @@ type RegisterPayload struct {
 	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from the client's card.
 	Amount uint `url:"amount"`
 
-	// Transaction currencyEnum.
+	// Transaction CurrencyEnum.
 	// One of: CurrencyMDL, CurrencyEUR, CurrencyUSD.
-	Currency currencyEnum `url:"currency"`
+	Currency CurrencyEnum `url:"currency"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
 	ClientIpAddress string `url:"client_ip_addr"`
@@ -27,7 +27,7 @@ type RegisterPayload struct {
 
 	// Language in which bank payment page will be displayed.
 	// One of: LanguageRomanian, LanguageRussian, LanguageEnglish.
-	Language languageEnum `url:"language"`
+	Language LanguageEnum `url:"language"`
 }
 
 // RegisterResult contains data returned on execution of a transaction registration request,
@@ -45,7 +45,7 @@ type RegisterResult struct {
 // For DMS transactions:
 // The resulting transaction should be confirmed with [ECommClient.TransactionStatus] (-c),
 // and executed with [ECommClient.ExecuteDMS] (-t).
-func (c *ECommClient) RegisterTransaction(transactionType transactionTypeEnum, payload RegisterPayload) (*RegisterResult, error) {
+func (c *ECommClient) RegisterTransaction(transactionType TransactionTypeEnum, payload RegisterPayload) (*RegisterResult, error) {
 	// Validate transaction type
 	var command string
 	switch transactionType {

@@ -1,12 +1,12 @@
 package maib
 
-type transactionTypeEnum uint8
+// TransactionTypeEnum holds EComm transaction types
+type TransactionTypeEnum uint8
 
-// transactionTypeEnum holds EComm transaction types
 const (
 	// SMS (Single Message System) transaction.
 	// A single transaction that allows you to transfer money from the client's account.
-	SMS transactionTypeEnum = iota
+	SMS TransactionTypeEnum = iota
 
 	// DMS (Dual Message System) transaction.
 	// Debiting from the client's card occurs in two stages:
@@ -15,76 +15,76 @@ const (
 	DMS
 )
 
-type currencyEnum uint16
+// CurrencyEnum holds ISO4217 codes for currencies.
+type CurrencyEnum uint16
 
-// currencyEnum holds ISO4217 codes for currencies.
 const (
 	// CurrencyMDL is ISO4217 code for Moldovan Lei.
-	CurrencyMDL currencyEnum = 498
+	CurrencyMDL CurrencyEnum = 498
 
 	// CurrencyEUR is ISO4217 code for Euro.
-	CurrencyEUR currencyEnum = 978
+	CurrencyEUR CurrencyEnum = 978
 
 	// CurrencyUSD is ISO4217 code for United States Dollar.
-	CurrencyUSD currencyEnum = 840
+	CurrencyUSD CurrencyEnum = 840
 )
 
-type languageEnum string
+// LanguageEnum holds 2 letter language identifiers.
+type LanguageEnum string
 
-// languageEnum holds 2 letter language identifiers.
 const (
 	// LanguageRomanian language identifier.
-	LanguageRomanian languageEnum = "ro"
+	LanguageRomanian LanguageEnum = "ro"
 
 	// LanguageRussian language identifier.
-	LanguageRussian languageEnum = "ru"
+	LanguageRussian LanguageEnum = "ru"
 
 	// LanguageEnglish language identifier.
-	LanguageEnglish languageEnum = "en"
+	LanguageEnglish LanguageEnum = "en"
 )
 
-type resultEnum string
+// ResultEnum holds possible values for RESULT field in response from MAIB EComm system.
+type ResultEnum string
 
-// resultEnum holds possible values for RESULT field in response from MAIB EComm system.
 const (
 	// ResultOk - the transaction is successfully completed.
-	ResultOk resultEnum = "OK"
+	ResultOk ResultEnum = "OK"
 
 	// ResultFailed - the transaction has failed.
-	ResultFailed resultEnum = "FAILED"
+	ResultFailed ResultEnum = "FAILED"
 
 	// ResultCreated - the transaction is just registered in the system.
-	ResultCreated resultEnum = "CREATED"
+	ResultCreated ResultEnum = "CREATED"
 
 	// ResultPending - the transaction is not completed yet.
-	ResultPending resultEnum = "PENDING"
+	ResultPending ResultEnum = "PENDING"
 
 	// ResultDeclined - the transaction is declined by EComm.
-	ResultDeclined resultEnum = "DECLINED"
+	ResultDeclined ResultEnum = "DECLINED"
 
 	// ResultReversed - the transaction is reversed.
-	ResultReversed resultEnum = "REVERSED"
+	ResultReversed ResultEnum = "REVERSED"
 
 	// ResultAutoReversed - the transaction is reversed by autoreversal.
-	ResultAutoReversed resultEnum = "AUTOREVERSED"
+	ResultAutoReversed ResultEnum = "AUTOREVERSED"
 
 	// ResultTimeout - the transaction was timed out.
-	ResultTimeout resultEnum = "TIMEOUT"
+	ResultTimeout ResultEnum = "TIMEOUT"
 )
 
-type resultPSEnum string
+// ResultPSEnum holds possible values for RESULT_PS field in response from MAIB EComm system.
+type ResultPSEnum string
 
-// resultPSEnum holds possible values for RESULT_PS field in response from MAIB EComm system.
 const (
 	// ResultPSActive - the transaction was registered and payment is not completed yet.
-	ResultPSActive resultPSEnum = "ACTIVE"
+	ResultPSActive ResultPSEnum = "ACTIVE"
 
 	// ResultPSFinished - payment was completed successfully.
-	ResultPSFinished resultPSEnum = "FINISHED"
+	ResultPSFinished ResultPSEnum = "FINISHED"
 
 	// ResultPSCancelled - payment was cancelled.
-	ResultPSCancelled resultPSEnum = "CANCELLED"
+	ResultPSCancelled ResultPSEnum = "CANCELLED"
 
 	// ResultPSReturned - payment was returned.
-	ResultPSReturned resultPSEnum = "RETURNED"
+	ResultPSReturned ResultPSEnum = "RETURNED"
 )
