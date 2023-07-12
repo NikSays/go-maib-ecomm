@@ -10,10 +10,10 @@ const statusCommand = "c"
 // StatusPayload contains data required to fetch transaction status (-c).
 type StatusPayload struct {
 	// ID of the transaction. 28 symbols in base64.
-	TransactionId string `url:"trans_id"`
+	TransactionID string `url:"trans_id"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
-	ClientIpAddress string `url:"client_ip_addr"`
+	ClientIPAddress string `url:"client_ip_addr"`
 }
 
 // StatusResult contains data returned by transaction status request (-c),
@@ -23,7 +23,7 @@ type StatusResult struct {
 	Result ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result, Payment Server interpretation.
-	ResultPs ResultPSEnum `mapstructure:"RESULT_PS"`
+	ResultPS ResultPSEnum `mapstructure:"RESULT_PS"`
 
 	// Transaction resul code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`
@@ -49,7 +49,7 @@ type StatusResult struct {
 
 	// Recurring payment identification in Payment Server.
 	// Available only if transaction is recurring.
-	RecurringPaymentId string `mapstructure:"RECC_PMNT_ID"`
+	RecurringPaymentID string `mapstructure:"RECC_PMNT_ID"`
 
 	// Recurring payment expiry date in Payment Server in the form "MMYY".
 	// Available only if transaction is recurring.
@@ -59,10 +59,10 @@ type StatusResult struct {
 // TransactionStatus returns the status of a transaction (-c).
 func (c *ECommClient) TransactionStatus(payload StatusPayload) (*StatusResult, error) {
 	// Validate payload
-	if !isValidTransactionID(payload.TransactionId) {
+	if !isValidTransactionID(payload.TransactionID) {
 		return nil, errMalformedTransactionID
 	}
-	if !isValidClientIpAddress(payload.ClientIpAddress) {
+	if !isValidClientIPAddress(payload.ClientIPAddress) {
 		return nil, errMalformedClientIP
 	}
 	// Send command

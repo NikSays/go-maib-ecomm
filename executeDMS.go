@@ -10,7 +10,7 @@ const executeDmsCommand = "t"
 // ExecuteDMSPayload contains data required to execute an DMS transaction.
 type ExecuteDMSPayload struct {
 	// ID of the transaction. 28 symbols in base64
-	TransactionId string `url:"trans_id"`
+	TransactionID string `url:"trans_id"`
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
@@ -22,7 +22,7 @@ type ExecuteDMSPayload struct {
 	Currency CurrencyEnum `url:"currency"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
-	ClientIpAddress string `url:"client_ip_addr"`
+	ClientIPAddress string `url:"client_ip_addr"`
 
 	// Transaction details. Optional.
 	Description string `url:"description,omitempty"`
@@ -51,7 +51,7 @@ type ExecuteDMSResult struct {
 // and checked with [ECommClient.TransactionStatus] (-c).
 func (c *ECommClient) ExecuteDMS(payload ExecuteDMSPayload) (*ExecuteDMSResult, error) {
 	// Validate payload
-	if !isValidTransactionID(payload.TransactionId) {
+	if !isValidTransactionID(payload.TransactionID) {
 		return nil, errMalformedTransactionID
 	}
 	if !isValidAmount(payload.Amount) {
@@ -60,7 +60,7 @@ func (c *ECommClient) ExecuteDMS(payload ExecuteDMSPayload) (*ExecuteDMSResult, 
 	if !isValidCurrency(uint16(payload.Currency)) {
 		return nil, errMalformedCurrency
 	}
-	if !isValidClientIpAddress(payload.ClientIpAddress) {
+	if !isValidClientIPAddress(payload.ClientIPAddress) {
 		return nil, errMalformedClientIP
 	}
 	if !isValidDescription(payload.Description) {

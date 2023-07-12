@@ -30,8 +30,8 @@ func isValidCurrency(currency uint16) bool {
 	return true
 }
 
-func isValidClientIpAddress(clientIpAddress string) bool {
-	ip := net.ParseIP(clientIpAddress)
+func isValidClientIPAddress(clientIPAddress string) bool {
+	ip := net.ParseIP(clientIPAddress)
 	if ip != nil {
 		return true
 	}

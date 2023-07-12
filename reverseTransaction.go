@@ -10,7 +10,7 @@ const reverseCommand = "r"
 // ReversePayload contains data required to reverse a transaction.
 type ReversePayload struct {
 	// ID of the transaction. 28 symbols in base64.
-	TransactionId string `url:"trans_id"`
+	TransactionID string `url:"trans_id"`
 
 	// Reversal amount. Positive integer with last 2 digits being the cents.
 	//
@@ -36,7 +36,7 @@ type ReverseResult struct {
 // ReverseTransaction reverses transaction and returns all or some funds to the client (-r).
 func (c *ECommClient) ReverseTransaction(payload ReversePayload) (*ReverseResult, error) {
 	// Validate payload
-	if !isValidTransactionID(payload.TransactionId) {
+	if !isValidTransactionID(payload.TransactionID) {
 		return nil, errMalformedTransactionID
 	}
 	if !isValidAmount(payload.Amount) {

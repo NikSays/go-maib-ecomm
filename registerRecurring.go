@@ -1,6 +1,7 @@
 package maib
 
 import (
+	"fmt"
 	"github.com/google/go-querystring/query"
 	"github.com/mitchellh/mapstructure"
 )
@@ -21,7 +22,7 @@ type RegisterRecurringPayload struct {
 	Currency CurrencyEnum `url:"currency"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
-	ClientIpAddress string `url:"client_ip_addr"`
+	ClientIPAddress string `url:"client_ip_addr"`
 
 	// Transaction details. Optional.
 	Description string `url:"description,omitempty"`
@@ -42,7 +43,7 @@ type RegisterRecurringPayload struct {
 // if no error is encountered.
 type RegisterRecurringResult struct {
 	// ID of the created transaction. 28 symbols in base64.
-	TransactionId string `mapstructure:"TRANSACTION_ID"`
+	TransactionID string `mapstructure:"TRANSACTION_ID"`
 }
 
 // RegisterRecurring creates a new recurring transaction.
@@ -80,7 +81,7 @@ func (c *ECommClient) RegisterRecurring(transactionType TransactionTypeEnum, pay
 	if !isValidCurrency(uint16(payload.Currency)) {
 		return nil, errMalformedCurrency
 	}
-	if !isValidClientIpAddress(payload.ClientIpAddress) {
+	if !isValidClientIPAddress(payload.ClientIPAddress) {
 		return nil, errMalformedClientIP
 	}
 	if !isValidDescription(payload.Description) {
@@ -106,8 +107,8 @@ func (c *ECommClient) RegisterRecurring(transactionType TransactionTypeEnum, pay
 	} else {
 		payloadValues.Set("perspayee_gen", "1")
 	}
-
 	// Send command
+	fmt.Println(payloadValues.Encode())
 	res, err := c.send(command, payloadValues.Encode())
 	if err != nil {
 		return nil, err

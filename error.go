@@ -20,13 +20,13 @@ type malformedInputEnum string
 // malformedInputEnum contains the names of the parameters and payload fields that can
 // fail validation, and thus will be returned in [ErrMalformedPayload]
 const (
-	FieldTransactionId   malformedInputEnum = "trans_id"
+	FieldTransactionID   malformedInputEnum = "trans_id"
 	FieldAmount          malformedInputEnum = "amount"
 	FieldCurrency        malformedInputEnum = "currency"
-	FieldClientIpAddress malformedInputEnum = "client_ip_addr"
+	FieldClientIPAddress malformedInputEnum = "client_ip_addr"
 	FieldDescription     malformedInputEnum = "description"
 	FieldLanguage        malformedInputEnum = "language"
-	FieldBillerClientId  malformedInputEnum = "biller_client_id"
+	FieldBillerClientID  malformedInputEnum = "biller_client_id"
 	FieldPerspayeeExpiry malformedInputEnum = "prespayee_expiry"
 	FieldTransactionType malformedInputEnum = "transaction_type"
 )
@@ -48,7 +48,7 @@ func (e ErrMalformedPayload) Error() string {
 // For internal use, since the same descriptions are repeated
 var (
 	errMalformedTransactionID = ErrMalformedPayload{
-		Field:       FieldTransactionId,
+		Field:       FieldTransactionID,
 		Description: "not 28 characters in base64",
 	}
 	errMalformedAmount = ErrMalformedPayload{
@@ -60,7 +60,7 @@ var (
 		Description: "invalid ISO 4217 3-number code",
 	}
 	errMalformedClientIP = ErrMalformedPayload{
-		Field:       FieldClientIpAddress,
+		Field:       FieldClientIPAddress,
 		Description: "invalid IP address",
 	}
 	errMalformedDescription = ErrMalformedPayload{
@@ -72,7 +72,7 @@ var (
 		Description: "either 0 or more than 32 characters",
 	}
 	errMalformedBillerClientID = ErrMalformedPayload{
-		Field:       FieldBillerClientId,
+		Field:       FieldBillerClientID,
 		Description: "either 0 or more than 49 characters",
 	}
 	errMalformedPerspayeeExpiry = ErrMalformedPayload{

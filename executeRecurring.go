@@ -19,7 +19,7 @@ type ExecuteRecurringPayload struct {
 	Currency CurrencyEnum `url:"currency"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
-	ClientIpAddress string `url:"client_ip_addr"`
+	ClientIPAddress string `url:"client_ip_addr"`
 
 	// Transaction details. Optional.
 	Description string `url:"description,omitempty"`
@@ -32,7 +32,7 @@ type ExecuteRecurringPayload struct {
 // if no error is encountered.
 type ExecuteRecurringResult struct {
 	// ID of the executed transaction. 28 symbols in base64.
-	TransactionId string `mapstructure:"TRANSACTION_ID"`
+	TransactionID string `mapstructure:"TRANSACTION_ID"`
 
 	// Transaction result status.
 	Result ResultEnum `mapstructure:"RESULT"`
@@ -58,7 +58,7 @@ func (c *ECommClient) ExecuteRecurring(payload ExecuteRecurringPayload) (*Execut
 	if !isValidCurrency(uint16(payload.Currency)) {
 		return nil, errMalformedCurrency
 	}
-	if !isValidClientIpAddress(payload.ClientIpAddress) {
+	if !isValidClientIPAddress(payload.ClientIPAddress) {
 		return nil, errMalformedClientIP
 	}
 	if !isValidDescription(payload.Description) {

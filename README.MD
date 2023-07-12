@@ -38,7 +38,7 @@ func main() {
 	res1, err := client.RegisterTransaction(maib.SMS, maib.RegisterPayload{
 		Amount:          1,
 		Currency:        maib.CurrencyMDL,
-		ClientIpAddress: "127.0.0.1",
+		ClientIPAddress: "127.0.0.1",
 		Description:     "No description",
 		Language:        maib.LanguageEnglish,
 	})
@@ -46,11 +46,11 @@ func main() {
 		fmt.Printf("ERR: %s", err.Error())
 		return
 	} else {
-		fmt.Printf("Ok: %s", res1.TransactionId)
+		fmt.Printf("Ok: %s", res1.TransactionID)
 	}
 	res2, err := client.ReverseTransaction(maib.ReversePayload{
 		Amount:        1,
-		TransactionId: res1.TransactionId,
+		TransactionID: res1.TransactionID,
 	})
 	if err != nil {
 		fmt.Printf("ERR: %s", err.Error())
