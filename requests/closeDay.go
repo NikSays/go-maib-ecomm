@@ -1,16 +1,21 @@
-package maib
+package requests
 
 import (
-	"github.com/mitchellh/mapstructure"
+	"github.com/NikSays/go-maib-ecomm/types"
+	"net/url"
 )
 
 const closeDayCommand = "b"
+
+// CloseDay closes the business day (-b).
+// This procedure must be initiated once a day. Recommended time is 23:59:00.
+type CloseDay struct{}
 
 // CloseDayResult contains data returned on closing of the business day,
 // if no error is encountered.
 type CloseDayResult struct {
 	// Transaction result status.
-	Result ResultEnum `mapstructure:"RESULT"`
+	Result types.ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`
@@ -42,17 +47,8 @@ type CloseDayResult struct {
 	DebitReversalAmount int `mapstructure:"fld_089"`
 }
 
-// CloseDay closes the business day (-b).
-// This procedure must be initiated once a day. Recommended time is 23:59:00.
-func (c *ECommClient) CloseDay() (*CloseDayResult, error) {
-	res, err := c.send(closeDayCommand, "")
-	if err != nil {
-		return nil, err
-	}
-	result := &CloseDayResult{}
-	err = mapstructure.Decode(&res, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
+func (CloseDay) Encode() (url.Values, error) {
+	v := url.Values{}
+	setCommand(&v, closeDayCommand)
+	return v, nil
 }

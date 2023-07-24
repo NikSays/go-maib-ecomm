@@ -1,14 +1,15 @@
-package maib
+package requests
 
 import (
+	"github.com/NikSays/go-maib-ecomm/types"
 	"github.com/google/go-querystring/query"
-	"github.com/mitchellh/mapstructure"
+	"net/url"
 )
 
 const statusCommand = "c"
 
-// StatusPayload contains data required to fetch transaction status (-c).
-type StatusPayload struct {
+// TransactionStatus returns the status of a transaction (-c).
+type TransactionStatus struct {
 	// ID of the transaction. 28 symbols in base64.
 	TransactionID string `url:"trans_id"`
 
@@ -16,14 +17,14 @@ type StatusPayload struct {
 	ClientIPAddress string `url:"client_ip_addr"`
 }
 
-// StatusResult contains data returned by transaction status request (-c),
+// TransactionStatusResult contains data returned by transaction status request (-c),
 // if no error is encountered.
-type StatusResult struct {
+type TransactionStatusResult struct {
 	// Transaction result status.
-	Result ResultEnum `mapstructure:"RESULT"`
+	Result types.ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result, Payment Server interpretation.
-	ResultPS ResultPSEnum `mapstructure:"RESULT_PS"`
+	ResultPS types.ResultPSEnum `mapstructure:"RESULT_PS"`
 
 	// Transaction resul code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`
@@ -56,28 +57,11 @@ type StatusResult struct {
 	RecurringPaymentExpiry string `mapstructure:"RECC_PMNT_EXPIRY"`
 }
 
-// TransactionStatus returns the status of a transaction (-c).
-func (c *ECommClient) TransactionStatus(payload StatusPayload) (*StatusResult, error) {
-	// Validate payload
-	if !isValidTransactionID(payload.TransactionID) {
-		return nil, errMalformedTransactionID
-	}
-	if !isValidClientIPAddress(payload.ClientIPAddress) {
-		return nil, errMalformedClientIP
-	}
-	// Send command
-	payloadValues, err := query.Values(payload)
+func (payload TransactionStatus) Encode() (url.Values, error) {
+	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err
 	}
-	res, err := c.send(statusCommand, payloadValues.Encode())
-	if err != nil {
-		return nil, err
-	}
-	result := &StatusResult{}
-	err = mapstructure.Decode(&res, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, err
+	setCommand(&v, statusCommand)
+	return v, nil
 }
