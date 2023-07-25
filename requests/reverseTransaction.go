@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-const reverseCommand = "r"
+const reverseTransactionCommand = "r"
 
 // ReverseTransaction reverses transaction and returns all or some funds to the client (-r).
 type ReverseTransaction struct {
@@ -43,7 +43,7 @@ func (payload ReverseTransaction) Encode() (url.Values, error) {
 	if payload.SuspectedFraud {
 		v.Set("suspected_fraud", "yes")
 	}
-	setCommand(&v, reverseCommand)
+	v.Set("command", reverseTransactionCommand)
 	return v, nil
 }
 

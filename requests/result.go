@@ -2,13 +2,7 @@ package requests
 
 import (
 	"github.com/mitchellh/mapstructure"
-	"net/url"
 )
-
-// Not a fitting file, but probably will deprecate
-func setCommand[T ~string](values *url.Values, command T) {
-	values.Set("command", string(command))
-}
 
 type resultTypes interface {
 	CloseDayResult | DeleteRecurringResult | ExecuteDMSResult |

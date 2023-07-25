@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-const executeDmsCommand = "t"
+const executeDMSCommand = "t"
 
 // ExecuteDMS executes a DMS transaction (-t) after it was created with [RegisterTransaction] (-a),
 // and checked with [TransactionStatus] (-c).
@@ -54,7 +54,7 @@ func (payload ExecuteDMS) Encode() (url.Values, error) {
 	if err != nil {
 		return nil, err
 	}
-	setCommand(&v, executeDmsCommand)
+	v.Set("command", executeDMSCommand)
 	return v, nil
 }
 

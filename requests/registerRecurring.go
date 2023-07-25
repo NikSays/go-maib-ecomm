@@ -7,14 +7,27 @@ import (
 	"net/url"
 )
 
-type registerRecurringTypesEnum string
+type registerRecurringTypeEnum int
 
 // Possible types for recurring transaction
 const (
-	RegisterRecurringSMS            registerRecurringTypesEnum = "z"
-	RegisterRecurringDMS            registerRecurringTypesEnum = "d"
-	RegisterRecurringWithoutPayment registerRecurringTypesEnum = "p"
+	RegisterRecurringSMS registerRecurringTypeEnum = iota // default
+	RegisterRecurringDMS
+	RegisterRecurringWithoutPayment
 )
+
+func (t registerRecurringTypeEnum) String() string {
+	switch t {
+	case RegisterRecurringSMS:
+		return "z"
+	case RegisterRecurringDMS:
+		return "d"
+	case RegisterRecurringWithoutPayment:
+		return "p"
+	default:
+		return ""
+	}
+}
 
 // RegisterRecurring creates a new recurring transaction.
 //
@@ -26,7 +39,7 @@ const (
 // and executed with [ExecuteDMS] (-t).
 type RegisterRecurring struct {
 	// Transaction type used for registration. Can be SMS (-z), DMS (-d), or without first payment (-p).
-	TransactionType registerRecurringTypesEnum `url:"-"`
+	TransactionType registerRecurringTypeEnum `url:"-"`
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	// Ignored for registration without first payment.
@@ -75,15 +88,12 @@ func (payload RegisterRecurring) Encode() (url.Values, error) {
 	} else {
 		v.Set("perspayee_gen", "1")
 	}
-	// Default transaction type
-	if len(payload.TransactionType) == 0 {
-		payload.TransactionType = RegisterRecurringSMS
-	}
+
 	// Amount not needed for -p
 	if payload.TransactionType == RegisterRecurringWithoutPayment {
 		v.Del("amount")
 	}
-	setCommand(&v, payload.TransactionType)
+	v.Set("command", payload.TransactionType.String())
 	return v, nil
 }
 

@@ -55,7 +55,7 @@ func (payload ExecuteRecurring) Encode() (url.Values, error) {
 	if err != nil {
 		return nil, err
 	}
-	setCommand(&v, executeRecurringCommand)
+	v.Set("command", executeRecurringCommand)
 	return v, nil
 }
 

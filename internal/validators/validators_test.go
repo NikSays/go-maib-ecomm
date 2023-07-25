@@ -327,7 +327,7 @@ func TestWithDescription(t *testing.T) {
 		{
 			name:               "Too long",
 			description:        tooLongDescription,
-			expectedErrorField: types.FieldLanguage,
+			expectedErrorField: types.FieldDescription,
 		},
 	}
 	for _, c := range cases {

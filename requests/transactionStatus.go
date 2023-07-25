@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-const statusCommand = "c"
+const transactionStatusCommand = "c"
 
 // TransactionStatus returns the status of a transaction (-c).
 type TransactionStatus struct {
@@ -63,7 +63,7 @@ func (payload TransactionStatus) Encode() (url.Values, error) {
 	if err != nil {
 		return nil, err
 	}
-	setCommand(&v, statusCommand)
+	v.Set("command", transactionStatusCommand)
 	return v, nil
 }
 

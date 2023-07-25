@@ -27,7 +27,7 @@ func (payload DeleteRecurring) Encode() (url.Values, error) {
 	if err != nil {
 		return nil, err
 	}
-	setCommand(&v, deleteRecurringCommand)
+	v.Set("command", deleteRecurringCommand)
 	return v, nil
 }
 

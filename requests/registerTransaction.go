@@ -7,13 +7,24 @@ import (
 	"net/url"
 )
 
-type registerTransactionTypesEnum string
+type registerTransactionTypeEnum int
 
 // Possible types for transaction
 const (
-	RegisterTransactionSMS registerTransactionTypesEnum = "v"
-	RegisterTransactionDMS registerTransactionTypesEnum = "a"
+	RegisterTransactionSMS registerTransactionTypeEnum = iota // default
+	RegisterTransactionDMS
 )
+
+func (t registerTransactionTypeEnum) String() string {
+	switch t {
+	case RegisterTransactionSMS:
+		return "v"
+	case RegisterTransactionDMS:
+		return "a"
+	default:
+		return ""
+	}
+}
 
 // RegisterTransaction creates a new SMS (-v) or DMS (-a) transaction.
 //
@@ -25,7 +36,7 @@ const (
 // and executed with [ECommClient.ExecuteDMS] (-t).
 type RegisterTransaction struct {
 	// Transaction type. Can be SMS (-v) or DMS (-a)
-	TransactionType registerTransactionTypesEnum `url:"-"`
+	TransactionType registerTransactionTypeEnum `url:"-"`
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
@@ -57,10 +68,7 @@ func (payload RegisterTransaction) Encode() (url.Values, error) {
 	if err != nil {
 		return nil, err
 	}
-	if len(payload.TransactionType) == 0 {
-		payload.TransactionType = RegisterTransactionSMS
-	}
-	setCommand(&v, payload.TransactionType)
+	v.Set("command", payload.TransactionType.String())
 	return v, nil
 }
 

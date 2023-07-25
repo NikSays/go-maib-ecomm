@@ -49,7 +49,7 @@ type CloseDayResult struct {
 
 func (CloseDay) Encode() (url.Values, error) {
 	v := url.Values{}
-	setCommand(&v, closeDayCommand)
+	v.Set("command", closeDayCommand)
 	return v, nil
 }
 
