@@ -15,7 +15,7 @@ func TestRegisterTransaction(t *testing.T) {
 		expectedEncoded    string
 	}{
 		{
-			name: "OK new SMS",
+			name: "OK SMS",
 			payload: RegisterTransaction{
 				TransactionType: RegisterTransactionSMS,
 				Amount:          1234,
@@ -27,7 +27,7 @@ func TestRegisterTransaction(t *testing.T) {
 			expectedEncoded: "amount=1234&client_ip_addr=127.0.0.1&command=v&currency=498&description=Description&language=en",
 		},
 		{
-			name: "OK new DMS",
+			name: "OK DMS",
 			payload: RegisterTransaction{
 				TransactionType: RegisterTransactionDMS,
 				Amount:          1234,
@@ -38,21 +38,18 @@ func TestRegisterTransaction(t *testing.T) {
 			},
 			expectedEncoded: "amount=1234&client_ip_addr=127.0.0.1&command=a&currency=498&description=Description&language=en",
 		},
-		// {
-		// 	name: "TransactionType invalid",
-		// 	payload: RegisterTransaction{
-		// 		TransactionType:   "wrong",
-		// 		Amount:            1234,
-		// 		Currency:          types.CurrencyMDL,
-		// 		ClientIPAddress:   "127.0.0.1",
-		// 		Description:       "Description",
-		// 		Language:          types.LanguageEnglish,
-		// 		BillerClientID:    "biller",
-		// 		PerspayeeExpiry:   "1224",
-		// 		OverwriteExisting: false,
-		// 	},
-		// 	expectedErrorField: types.FieldTransactionType,
-		// },
+		{
+			name: "TransactionType invalid",
+			payload: RegisterTransaction{
+				TransactionType: -9,
+				Amount:          1234,
+				Currency:        types.CurrencyMDL,
+				ClientIPAddress: "127.0.0.1",
+				Description:     "Description",
+				Language:        types.LanguageEnglish,
+			},
+			expectedErrorField: types.FieldTransactionType,
+		},
 		{
 			name: "Amount invalid",
 			payload: RegisterTransaction{

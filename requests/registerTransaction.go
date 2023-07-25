@@ -74,6 +74,7 @@ func (payload RegisterTransaction) Encode() (url.Values, error) {
 
 func (payload RegisterTransaction) Validate() error {
 	return validators.Validate(
+		validators.WithTransactionType(payload.TransactionType.String()),
 		validators.WithAmount(payload.Amount, true),
 		validators.WithCurrency(payload.Currency),
 		validators.WithClientIPAddress(payload.ClientIPAddress),

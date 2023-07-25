@@ -15,7 +15,7 @@ func TestRegisterRecurring(t *testing.T) {
 		expectedEncoded    string
 	}{
 		{
-			name: "OK new SMS",
+			name: "OK SMS",
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
@@ -30,7 +30,7 @@ func TestRegisterRecurring(t *testing.T) {
 			expectedEncoded: "amount=1234&biller_client_id=biller&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_gen=1",
 		},
 		{
-			name: "OK new DMS",
+			name: "OK DMS",
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringDMS,
 				Amount:            1234,
@@ -88,21 +88,21 @@ func TestRegisterRecurring(t *testing.T) {
 			},
 			expectedEncoded: "biller_client_id=biller&client_ip_addr=127.0.0.1&command=p&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_gen=1",
 		},
-		// {
-		// 	name: "TransactionType invalid",
-		// 	payload: RegisterRecurring{
-		// 		TransactionType:   "wrong",
-		// 		Amount:            1234,
-		// 		Currency:          types.CurrencyMDL,
-		// 		ClientIPAddress:   "127.0.0.1",
-		// 		Description:       "Description",
-		// 		Language:          types.LanguageEnglish,
-		// 		BillerClientID:    "biller",
-		// 		PerspayeeExpiry:   "1224",
-		// 		OverwriteExisting: false,
-		// 	},
-		// 	expectedErrorField: types.FieldTransactionType,
-		// },
+		{
+			name: "TransactionType invalid",
+			payload: RegisterRecurring{
+				TransactionType:   -9,
+				Amount:            1234,
+				Currency:          types.CurrencyMDL,
+				ClientIPAddress:   "127.0.0.1",
+				Description:       "Description",
+				Language:          types.LanguageEnglish,
+				BillerClientID:    "biller",
+				PerspayeeExpiry:   "1224",
+				OverwriteExisting: false,
+			},
+			expectedErrorField: types.FieldTransactionType,
+		},
 		{
 			name: "Amount invalid",
 			payload: RegisterRecurring{

@@ -19,6 +19,18 @@ func Validate(validators ...FieldValidator) error {
 	return nil
 }
 
+func WithTransactionType(transactionType string) FieldValidator {
+	return func() error {
+		if len(transactionType) != 1 {
+			return types.ErrMalformedPayload{
+				Field:       types.FieldTransactionType,
+				Description: "not 1 character",
+			}
+		}
+		return nil
+	}
+}
+
 func WithTransactionID(transactionID string) FieldValidator {
 	return func() error {
 		if len(transactionID) != 28 {

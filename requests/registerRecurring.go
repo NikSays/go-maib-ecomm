@@ -103,6 +103,7 @@ func (payload RegisterRecurring) Validate() error {
 		isAmountRequired = false
 	}
 	return validators.Validate(
+		validators.WithTransactionType(payload.TransactionType.String()),
 		validators.WithAmount(payload.Amount, isAmountRequired),
 		validators.WithCurrency(payload.Currency),
 		validators.WithClientIPAddress(payload.ClientIPAddress),

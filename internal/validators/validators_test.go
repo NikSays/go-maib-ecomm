@@ -9,6 +9,36 @@ import (
 
 const validTransactionID = "abcdefghijklmnopqrstuvwxyz1="
 
+func TestWithTransactionType(t *testing.T) {
+
+	cases := []struct {
+		name               string
+		transactionType    string
+		expectedErrorField types.PayloadField
+	}{
+		{
+			name:               "OK",
+			transactionType:    "a",
+			expectedErrorField: "",
+		},
+		{
+			name:               "Invalid type",
+			transactionType:    "",
+			expectedErrorField: types.FieldTransactionType,
+		},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			err := Validate(WithTransactionType(c.transactionType))
+			if c.expectedErrorField == "" {
+				assert.Nil(t, err)
+			} else {
+				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+			}
+		})
+	}
+}
+
 func TestWithTransactionID(t *testing.T) {
 	const transactionIDLength = 28
 	var invalidTransactionID = strings.Repeat("$", transactionIDLength)
