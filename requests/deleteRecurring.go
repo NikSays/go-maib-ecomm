@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
 	"github.com/google/go-querystring/query"
 	"net/url"
@@ -28,4 +29,10 @@ func (payload DeleteRecurring) Encode() (url.Values, error) {
 	}
 	setCommand(&v, deleteRecurringCommand)
 	return v, nil
+}
+
+func (payload DeleteRecurring) Validate() error {
+	return validators.Validate(
+		validators.WithBillerClientID(payload.BillerClientID, true),
+	)
 }

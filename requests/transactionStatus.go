@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
 	"github.com/google/go-querystring/query"
 	"net/url"
@@ -64,4 +65,11 @@ func (payload TransactionStatus) Encode() (url.Values, error) {
 	}
 	setCommand(&v, statusCommand)
 	return v, nil
+}
+
+func (payload TransactionStatus) Validate() error {
+	return validators.Validate(
+		validators.WithTransactionID(payload.TransactionID),
+		validators.WithClientIPAddress(payload.ClientIPAddress),
+	)
 }

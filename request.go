@@ -2,6 +2,7 @@ package maib
 
 import (
 	"fmt"
+	"github.com/NikSays/go-maib-ecomm/types"
 	"io"
 	"net/url"
 	"strconv"
@@ -16,7 +17,7 @@ type Request interface {
 
 	// Validate goes through the fields of the payload, and returns an error if any one of them
 	// does not fit the requirements.
-	// Validate() error
+	Validate() error
 }
 
 // Send validates a [Request], and sends it to MAIB EComm servers.
@@ -27,7 +28,7 @@ func (c ECommClient) Send(req Request) (map[string]any, error) {
 		return nil, err
 	}
 	// Validate request
-	// err = req.Validate()
+	err = req.Validate()
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +50,7 @@ func (c ECommClient) Send(req Request) (map[string]any, error) {
 
 	// Catch error
 	if strings.HasPrefix(body, "error") {
-		return nil, fmt.Errorf("%w: %s", ErrMAIB, body)
+		return nil, fmt.Errorf("%w: %s", types.ErrMAIB, body)
 	}
 
 	// Parse response
@@ -58,12 +59,12 @@ func (c ECommClient) Send(req Request) (map[string]any, error) {
 	for _, line := range lines {
 		parts := strings.Split(line, ": ")
 		if len(parts) != 2 {
-			return nil, fmt.Errorf("%w: wrong line format: \"%s\"", ErrParse, line)
+			return nil, fmt.Errorf("%w: wrong line format: \"%s\"", types.ErrParse, line)
 		}
 		key, value := parts[0], parts[1]
 		parsedValue, err := parseField(key, value)
 		if err != nil {
-			return nil, fmt.Errorf("%w: wrong value type in \"%s\": %w", ErrParse, line, err)
+			return nil, fmt.Errorf("%w: wrong value type in \"%s\": %w", types.ErrParse, line, err)
 		}
 		result[key] = parsedValue
 	}

@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
 	"github.com/google/go-querystring/query"
 	"net/url"
@@ -84,4 +85,20 @@ func (payload RegisterRecurring) Encode() (url.Values, error) {
 	}
 	setCommand(&v, payload.TransactionType)
 	return v, nil
+}
+
+func (payload RegisterRecurring) Validate() error {
+	isAmountRequired := true
+	if payload.TransactionType == RegisterRecurringWithoutPayment {
+		isAmountRequired = false
+	}
+	return validators.Validate(
+		validators.WithAmount(payload.Amount, isAmountRequired),
+		validators.WithCurrency(payload.Currency),
+		validators.WithClientIPAddress(payload.ClientIPAddress),
+		validators.WithDescription(payload.Description),
+		validators.WithLanguage(payload.Language),
+		validators.WithBillerClientID(payload.BillerClientID, false),
+		validators.WithPerspayeeExpiry(payload.PerspayeeExpiry),
+	)
 }

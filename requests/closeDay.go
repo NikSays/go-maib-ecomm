@@ -52,3 +52,7 @@ func (CloseDay) Encode() (url.Values, error) {
 	setCommand(&v, closeDayCommand)
 	return v, nil
 }
+
+func (CloseDay) Validate() error {
+	return nil
+}

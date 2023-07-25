@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
 	"github.com/google/go-querystring/query"
 	"net/url"
@@ -56,4 +57,14 @@ func (payload ExecuteRecurring) Encode() (url.Values, error) {
 	}
 	setCommand(&v, executeRecurringCommand)
 	return v, nil
+}
+
+func (payload ExecuteRecurring) Validate() error {
+	return validators.Validate(
+		validators.WithAmount(payload.Amount, true),
+		validators.WithCurrency(payload.Currency),
+		validators.WithClientIPAddress(payload.ClientIPAddress),
+		validators.WithDescription(payload.Description),
+		validators.WithBillerClientID(payload.BillerClientID, true),
+	)
 }
