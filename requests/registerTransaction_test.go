@@ -48,7 +48,7 @@ func TestRegisterTransaction(t *testing.T) {
 				Description:     "Description",
 				Language:        types.LanguageEnglish,
 			},
-			expectedErrorField: types.FieldTransactionType,
+			expectedErrorField: types.FieldCommand,
 		},
 		{
 			name: "Amount invalid",

@@ -7,16 +7,25 @@ import (
 	"net/url"
 )
 
-type registerRecurringTypeEnum int
+// RegisterRecurringType holds possible types for recurring transaction.
+type RegisterRecurringType int
 
-// Possible types for recurring transaction
 const (
-	RegisterRecurringSMS registerRecurringTypeEnum = iota // default
+	// RegisterRecurringSMS is a recurring transaction type which is initialized with an SMS transaction.
+	// The resulting transaction should be confirmed with TransactionStatus (-c).
+	//
+	// This is the default transaction type.
+	RegisterRecurringSMS RegisterRecurringType = iota // default
+	// RegisterRecurringDMS is a recurring transaction type which is initialized with a DMS transaction.
+	// The resulting transaction should be confirmed with TransactionStatus (-c), and executed with ExecuteDMS (-t).
 	RegisterRecurringDMS
+	// RegisterRecurringWithoutPayment is a recurring transaction type which is initialized without a transaction.
 	RegisterRecurringWithoutPayment
 )
 
-func (t registerRecurringTypeEnum) String() string {
+// String converts RegisterRecurringType into the EComm command.
+// Returns an empty string for unknown values.
+func (t RegisterRecurringType) String() string {
 	switch t {
 	case RegisterRecurringSMS:
 		return "z"
@@ -30,16 +39,10 @@ func (t registerRecurringTypeEnum) String() string {
 }
 
 // RegisterRecurring creates a new recurring transaction.
-//
-// For SMS transactions:
-// The resulting transaction should be confirmed with [TransactionStatus] (-c).
-//
-// For DMS transactions:
-// The resulting transaction should be confirmed with [TransactionStatus] (-c),
-// and executed with [ExecuteDMS] (-t).
 type RegisterRecurring struct {
 	// Transaction type used for registration. Can be SMS (-z), DMS (-d), or without first payment (-p).
-	TransactionType registerRecurringTypeEnum `url:"-"`
+	// Default is SMS.
+	TransactionType RegisterRecurringType `url:"-"`
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	// Ignored for registration without first payment.
@@ -56,7 +59,7 @@ type RegisterRecurring struct {
 	// Transaction details. Optional.
 	Description string `url:"description,omitempty"`
 
-	// Language in which the bank payment page will be displayed
+	// Language in which the bank payment page will be displayed.
 	Language types.Language `url:"language"`
 
 	// Identifier of the recurring payment. If not specified,

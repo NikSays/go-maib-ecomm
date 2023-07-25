@@ -46,7 +46,7 @@ type TransactionStatusResult struct {
 
 	AAV string `mapstructure:"AAV"`
 
-	// PAR value identifying an account
+	// PAR value identifying an account.
 	PaymentAccountReference string `mapstructure:"PAYMENT_ACCOUNT_REFERENCE"`
 
 	// Recurring payment identification in Payment Server.

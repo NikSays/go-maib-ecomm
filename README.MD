@@ -27,4 +27,4 @@ Default `.pfx` pkcs12 key works just fine.
 
 ---
 
-Documentation and examples are available at [Go Reference](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm)
+Documentation and examples are available at [Go Reference](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm).

@@ -53,7 +53,6 @@ func NewClient(config Config) (*ECommClient, error) {
 		ClientCAs:    caPool,
 		Certificates: []tls.Certificate{tlsCertificate},
 	}
-	// use client provided http.Client?
 	httpClient := http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: tlsConfig,

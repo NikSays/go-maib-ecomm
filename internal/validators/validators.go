@@ -1,3 +1,6 @@
+/*
+Package validators provides functions to validate input without boilerplate.
+*/
 package validators
 
 import (
@@ -7,8 +10,11 @@ import (
 	"strconv"
 )
 
+// FieldValidator is the function used as argument to [Validate].
 type FieldValidator func() error
 
+// Validate runs argument functions until one of them returns an error.
+// Use any of the With... functions as arguments.
 func Validate(validators ...FieldValidator) error {
 	for _, v := range validators {
 		err := v()
@@ -19,11 +25,12 @@ func Validate(validators ...FieldValidator) error {
 	return nil
 }
 
+// WithTransactionType verifies that transactionType is exactly one character, and not the default empty value.
 func WithTransactionType(transactionType string) FieldValidator {
 	return func() error {
 		if len(transactionType) != 1 {
 			return types.ErrMalformedPayload{
-				Field:       types.FieldTransactionType,
+				Field:       types.FieldCommand,
 				Description: "not 1 character",
 			}
 		}
@@ -31,6 +38,7 @@ func WithTransactionType(transactionType string) FieldValidator {
 	}
 }
 
+// WithTransactionID verifies that transactionID is 28 base64 characters.
 func WithTransactionID(transactionID string) FieldValidator {
 	return func() error {
 		if len(transactionID) != 28 {
@@ -50,6 +58,7 @@ func WithTransactionID(transactionID string) FieldValidator {
 
 }
 
+// WithAmount verifies that amount is at most 12 digits; not 0, if required.
 func WithAmount(amount uint, required bool) FieldValidator {
 	return func() error {
 		if amount > 999999999999 {
@@ -67,6 +76,7 @@ func WithAmount(amount uint, required bool) FieldValidator {
 	}
 }
 
+// WithCurrency verifies that currency is a 3 digit non-negative integer.
 func WithCurrency(currency types.Currency) FieldValidator {
 	return func() error {
 		if currency < 0 || currency > 999 {
@@ -79,6 +89,7 @@ func WithCurrency(currency types.Currency) FieldValidator {
 	}
 }
 
+// WithClientIPAddress verifies that address is a valid IP address.
 func WithClientIPAddress(address string) FieldValidator {
 	return func() error {
 		ip := net.ParseIP(address)
@@ -92,6 +103,7 @@ func WithClientIPAddress(address string) FieldValidator {
 	}
 }
 
+// WithLanguage verifies that language is a non-empty string, with at most 32 characters.
 func WithLanguage(language types.Language) FieldValidator {
 	return func() error {
 		if len(language) < 1 || len(language) > 32 {
@@ -104,6 +116,7 @@ func WithLanguage(language types.Language) FieldValidator {
 	}
 }
 
+// WithBillerClientID verifies that billerClientID is at most 49 characters; not empty, if required.
 func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 	return func() error {
 		if len(billerClientID) > 49 {
@@ -121,6 +134,8 @@ func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 	}
 }
 
+// WithPerspayeeExpiry verifies that prespayeeExpiry is 4 characters, first 2 being a number between 1 and 12,
+// second 2 being a non-negative integer.
 func WithPerspayeeExpiry(prespayeeExpiry string) FieldValidator {
 	return func() error {
 		if len(prespayeeExpiry) != 4 {
@@ -159,6 +174,7 @@ func WithPerspayeeExpiry(prespayeeExpiry string) FieldValidator {
 	}
 }
 
+// WithDescription verifies that description is at most 125 characters.
 func WithDescription(description string) FieldValidator {
 	return func() error {
 		if len(description) > 125 {

@@ -12,7 +12,7 @@ const executeDMSCommand = "t"
 // ExecuteDMS executes a DMS transaction (-t) after it was created with [RegisterTransaction] (-a),
 // and checked with [TransactionStatus] (-c).
 type ExecuteDMS struct {
-	// ID of the transaction. 28 symbols in base64
+	// ID of the transaction. 28 symbols in base64.
 	TransactionID string `url:"trans_id"`
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.

@@ -24,7 +24,7 @@ func TestWithTransactionType(t *testing.T) {
 		{
 			name:               "Invalid type",
 			transactionType:    "",
-			expectedErrorField: types.FieldTransactionType,
+			expectedErrorField: types.FieldCommand,
 		},
 	}
 	for _, c := range cases {
@@ -372,17 +372,24 @@ func TestWithDescription(t *testing.T) {
 	}
 }
 
+func Example() {
+	err := Validate(
+		WithTransactionType("a"),
+		WithTransactionID(validTransactionID),
+		WithAmount(1000, true),
+		WithCurrency(types.CurrencyMDL),
+		WithClientIPAddress("127.0.0.1"),
+		WithLanguage(types.LanguageEnglish),
+		WithBillerClientID("biller", true),
+		WithPerspayeeExpiry("1224"),
+		WithDescription("description"))
+	if err != nil {
+		// Validation failed
+	}
+}
+
 func BenchmarkValidateAll(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		err := Validate(
-			WithTransactionID(validTransactionID),
-			WithAmount(1000, true),
-			WithCurrency(types.CurrencyMDL),
-			WithClientIPAddress("127.0.0.1"),
-			WithLanguage(types.LanguageEnglish),
-			WithBillerClientID("biller", true),
-			WithPerspayeeExpiry("1224"),
-			WithDescription("description"))
-		assert.Nil(b, err)
+		Example()
 	}
 }

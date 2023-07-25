@@ -1,7 +1,7 @@
 package types
 
 // Currency is an alias type for int. Valid values are 3 digit ISO4217 codes. The most common codes are exported by
-// this package
+// this package.
 type Currency int
 
 const (

@@ -101,7 +101,7 @@ func TestRegisterRecurring(t *testing.T) {
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldTransactionType,
+			expectedErrorField: types.FieldCommand,
 		},
 		{
 			name: "Amount invalid",

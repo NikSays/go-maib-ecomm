@@ -18,10 +18,10 @@ var (
 // ErrMalformedPayload is triggered before sending the request
 // to MAIB EComm, if an error was encountered in payload input.
 type ErrMalformedPayload struct {
-	// Which field is malformed
+	// Which field is malformed.
 	Field PayloadField
 
-	// Human-readable explanation of the requirements
+	// Human-readable explanation of the requirements.
 	Description string
 }
 

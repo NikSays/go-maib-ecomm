@@ -2,7 +2,7 @@ package types
 
 type PayloadField string
 
-// PayloadField contains the names of the parameters and payload fields
+// PayloadField contains the names of the payload fields. Used in [ErrMalformedPayload].
 const (
 	FieldTransactionID   PayloadField = "trans_id"
 	FieldAmount          PayloadField = "amount"
@@ -12,5 +12,5 @@ const (
 	FieldLanguage        PayloadField = "language"
 	FieldBillerClientID  PayloadField = "biller_client_id"
 	FieldPerspayeeExpiry PayloadField = "prespayee_expiry"
-	FieldTransactionType PayloadField = "transaction_type"
+	FieldCommand         PayloadField = "command"
 )

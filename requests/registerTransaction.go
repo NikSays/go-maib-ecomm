@@ -7,15 +7,24 @@ import (
 	"net/url"
 )
 
-type registerTransactionTypeEnum int
+// RegisterTransactionType holds possible types for recurring transaction.
+type RegisterTransactionType int
 
-// Possible types for transaction
 const (
-	RegisterTransactionSMS registerTransactionTypeEnum = iota // default
+	// RegisterTransactionSMS is the Single Messaging System transaction type.
+	// Such a transaction is executed immediately and should be confirmed with TransactionStatus (-c).
+	//
+	// This is the default transaction type.
+	RegisterTransactionSMS RegisterTransactionType = iota
+	// RegisterTransactionDMS is the Double Messaging System transaction type.
+	// This transaction should be confirmed with TransactionStatus (-c),
+	// and executed with ExecuteDMS (-t).
 	RegisterTransactionDMS
 )
 
-func (t registerTransactionTypeEnum) String() string {
+// String converts RegisterTransactionType into the EComm command.
+// Returns an empty string for unknown values.
+func (t RegisterTransactionType) String() string {
 	switch t {
 	case RegisterTransactionSMS:
 		return "v"
@@ -27,16 +36,10 @@ func (t registerTransactionTypeEnum) String() string {
 }
 
 // RegisterTransaction creates a new SMS (-v) or DMS (-a) transaction.
-//
-// For SMS transactions:
-// The resulting transaction should be confirmed with [ECommClient.TransactionStatus] (-c).
-//
-// For DMS transactions:
-// The resulting transaction should be confirmed with [ECommClient.TransactionStatus] (-c),
-// and executed with [ECommClient.ExecuteDMS] (-t).
 type RegisterTransaction struct {
-	// Transaction type. Can be SMS (-v) or DMS (-a)
-	TransactionType registerTransactionTypeEnum `url:"-"`
+	// Transaction type. Can be SMS (-v) or DMS (-a).
+	// Default is SMS.
+	TransactionType RegisterTransactionType `url:"-"`
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
@@ -52,7 +55,7 @@ type RegisterTransaction struct {
 	// Transaction details. Optional.
 	Description string `url:"description,omitempty"`
 
-	// Language in which the bank payment page will be displayed
+	// Language in which the bank payment page will be displayed.
 	Language types.Language `url:"language"`
 }
 

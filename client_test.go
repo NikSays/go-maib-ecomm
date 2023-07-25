@@ -16,6 +16,10 @@ func Example() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Send a Transaction Registration request.
+	// Equivalent to:
+	// command=v&amount=1000&currency=978&language=en&client_ip_addr=127.0.0.1&description=10+EUR+will+be+charged
 	res, err := client.Send(requests.RegisterTransaction{
 		TransactionType: requests.RegisterTransactionSMS,
 		Amount:          1000,
@@ -27,17 +31,26 @@ func Example() {
 	if err != nil {
 		panic(err)
 	}
-	newTr, err := requests.DecodeResponse[requests.RegisterTransactionResult](res)
+
+	// Decode response into RegisterTransactionResult struct.
+	newTransaction, err := requests.DecodeResponse[requests.RegisterTransactionResult](res)
+
+	// Send a Transaction Status request.
+	// Equivalent to:
+	// command=c&trans_id=xxxxxxxxxxxxxxxxxxxxxxxxxxx&client_ip_addr=127.0.0.1
 	res, err = client.Send(requests.TransactionStatus{
-		TransactionID:   newTr.TransactionID,
+		TransactionID:   newTransaction.TransactionID,
 		ClientIPAddress: "127.0.0.1",
 	})
 	if err != nil {
 		panic(err)
 	}
+
+	// Decode response into TransactionStatusResult struct.
 	status, err := requests.DecodeResponse[requests.TransactionStatusResult](res)
 	if err != nil {
 		panic(err)
 	}
+
 	fmt.Println(status.Result)
 }
