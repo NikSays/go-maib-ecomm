@@ -34,8 +34,12 @@ func (c ECommClient) Send(req Request) (map[string]any, error) {
 	}
 
 	// Make request
-	urlString := fmt.Sprintf("%s?%s", c.merchantHandlerEndpoint, queryValues.Encode())
-	res, err := c.httpClient.Post(urlString, "", nil)
+	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
+	if err != nil {
+		return nil, err
+	}
+	reqURL.RawQuery = queryValues.Encode()
+	res, err := c.httpClient.Post(reqURL.String(), "", nil)
 	if err != nil {
 		return nil, fmt.Errorf("couldn't complete request to MAIB EComm: %w", err)
 	}
@@ -53,7 +57,13 @@ func (c ECommClient) Send(req Request) (map[string]any, error) {
 		return nil, fmt.Errorf("%w: %s", types.ErrMAIB, body)
 	}
 
-	// Parse response
+	result, err := parseBody(body)
+
+	return result, err
+}
+
+// parseBody splits each line as "key: value", converting types
+func parseBody(body string) (map[string]any, error) {
 	result := make(map[string]any)
 	lines := strings.Split(body, "\n")
 	for _, line := range lines {
@@ -68,7 +78,6 @@ func (c ECommClient) Send(req Request) (map[string]any, error) {
 		}
 		result[key] = parsedValue
 	}
-
 	return result, nil
 }
 
@@ -78,8 +87,8 @@ func parseField(key string, value string) (any, error) {
 	// Possible int fields in response
 	case
 		"RESULT_CODE", "RRN", "APPROVAL_CODE",
-		"fld_074", "fld_075", "fld_076", "fld_077",
-		"fld_086", "fld_087", "fld_088", "fld_089":
+		"FLD_074", "FLD_075", "FLD_076", "FLD_077",
+		"FLD_086", "FLD_087", "FLD_088", "FLD_089":
 
 		parsed, err := strconv.Atoi(value)
 		return parsed, err
