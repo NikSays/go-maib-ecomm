@@ -67,15 +67,21 @@ func parseBody(body string) (map[string]any, error) {
 	result := make(map[string]any)
 	lines := strings.Split(body, "\n")
 	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
 		parts := strings.Split(line, ": ")
 		if len(parts) != 2 {
 			return nil, fmt.Errorf("%w: wrong line format: \"%s\"", types.ErrParse, line)
 		}
+
 		key, value := parts[0], parts[1]
 		parsedValue, err := parseField(key, value)
 		if err != nil {
 			return nil, fmt.Errorf("%w: wrong value type in \"%s\": %w", types.ErrParse, line, err)
 		}
+
 		result[key] = parsedValue
 	}
 	return result, nil

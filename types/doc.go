@@ -1,7 +1,2 @@
-/*
-Package types contains:
-  - Useful constants for request payloads ([Currency], [Language])
-  - Enums for result fields ([ResultEnum], [ResultPSEnum])
-  - Errors used across submodules ([ErrMAIB], [ErrParse], [ErrMalformedPayload])
-*/
+// Package types contains errors, types, constants, and enums used throughout the module.
 package types
