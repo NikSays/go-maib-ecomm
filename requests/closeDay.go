@@ -20,31 +20,31 @@ type CloseDayResult struct {
 	// Transaction result code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`
 
-	// Number of credit transactions (fld_074, max 10 digits).
+	// Number of credit transactions (FLD_074, max 10 digits).
 	// Available only if resultCode begins with 5.
-	CreditTransactionNumber int `mapstructure:"fld_074"`
-	// Number of credit reversals (fld_075, max 10 digits).
+	CreditTransactionNumber int `mapstructure:"FLD_074"`
+	// Number of credit reversals (FLD_075, max 10 digits).
 	// Available only if resultCode begins with 5.
-	CreditReversalNumber int `mapstructure:"fld_075"`
-	// Number of debit transactions (fld_076, max 10 digits).
+	CreditReversalNumber int `mapstructure:"FLD_075"`
+	// Number of debit transactions (FLD_076, max 10 digits).
 	// Available only if resultCode begins with 5.
-	DebitTransactionNumber int `mapstructure:"fld_076"`
-	// Number of debit reversals (fld_077, max 10 digits).
+	DebitTransactionNumber int `mapstructure:"FLD_076"`
+	// Number of debit reversals (FLD_077, max 10 digits).
 	// Available only if resultCode begins with 5.
-	DebitReversalNumber int `mapstructure:"fld_077"`
+	DebitReversalNumber int `mapstructure:"FLD_077"`
 
-	// Total amount of credit transactions (fld_086, max 16 digits).
+	// Total amount of credit transactions (FLD_086, max 16 digits).
 	// Available only if resultCode begins with 5.
-	CreditTransactionAmount int `mapstructure:"fld_086"`
-	// Total amount of credit reversals (fld_087, max 16 digits).
+	CreditTransactionAmount int `mapstructure:"FLD_086"`
+	// Total amount of credit reversals (FLD_087, max 16 digits).
 	// Available only if resultCode begins with 5.
-	CreditReversalAmount int `mapstructure:"fld_087"`
-	// Total amount of debit transactions (fld_088, max 16 digits).
+	CreditReversalAmount int `mapstructure:"FLD_087"`
+	// Total amount of debit transactions (FLD_088, max 16 digits).
 	// Available only if resultCode begins with 5.
-	DebitTransactionAmount int `mapstructure:"fld_088"`
-	// Total amount of debit reversals (fld_089, max 16 digits).
+	DebitTransactionAmount int `mapstructure:"FLD_088"`
+	// Total amount of debit reversals (FLD_089, max 16 digits).
 	// Available only if resultCode begins with 5.
-	DebitReversalAmount int `mapstructure:"fld_089"`
+	DebitReversalAmount int `mapstructure:"FLD_089"`
 }
 
 func (CloseDay) Encode() (url.Values, error) {
