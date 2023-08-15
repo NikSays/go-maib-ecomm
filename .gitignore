@@ -23,7 +23,7 @@ config/.env
 !go.mod
 
 !README.md
-!LICENSE
+!LICENSE*
 
 # ...even if they are in subdirectories
 !*/
