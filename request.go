@@ -92,7 +92,7 @@ func parseField(key string, value string) (any, error) {
 	switch key {
 	// Possible int fields in response
 	case
-		"RESULT_CODE", "RRN", "APPROVAL_CODE",
+		"RESULT_CODE", "RRN",
 		"FLD_074", "FLD_075", "FLD_076", "FLD_077",
 		"FLD_086", "FLD_087", "FLD_088", "FLD_089":
 

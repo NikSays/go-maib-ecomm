@@ -19,7 +19,7 @@ func TestParseBody(t *testing.T) {
 	}
 
 	intFields := []string{
-		"RESULT_CODE", "RRN", "APPROVAL_CODE",
+		"RESULT_CODE", "RRN",
 		"FLD_074", "FLD_075", "FLD_076", "FLD_077",
 		"FLD_086", "FLD_087", "FLD_088", "FLD_089",
 	}
@@ -42,7 +42,20 @@ func TestParseBody(t *testing.T) {
 		assert.Equal(t, intValue, parsed[f])
 	}
 
-	result, err := requests.DecodeResponse[requests.CloseDayResult](parsed)
-	assert.Equal(t, 123, result.DebitReversalAmount)
+	_, err = requests.DecodeResponse[requests.CloseDayResult](parsed)
+	assert.Nil(t, err)
+	_, err = requests.DecodeResponse[requests.DeleteRecurringResult](parsed)
+	assert.Nil(t, err)
+	_, err = requests.DecodeResponse[requests.ExecuteDMSResult](parsed)
+	assert.Nil(t, err)
+	_, err = requests.DecodeResponse[requests.ExecuteRecurringResult](parsed)
+	assert.Nil(t, err)
+	_, err = requests.DecodeResponse[requests.RegisterRecurringResult](parsed)
+	assert.Nil(t, err)
+	_, err = requests.DecodeResponse[requests.RegisterTransactionResult](parsed)
+	assert.Nil(t, err)
+	_, err = requests.DecodeResponse[requests.ReverseTransactionResult](parsed)
+	assert.Nil(t, err)
+	_, err = requests.DecodeResponse[requests.TransactionStatusResult](parsed)
 	assert.Nil(t, err)
 }
