@@ -42,8 +42,8 @@ type ExecuteDMSResult struct {
 	// Retrieval reference number returned from Card Suite FO.
 	RRN int `mapstructure:"RRN"`
 
-	// Approval Code returned from Card Suite FO (max 6 digits).
-	ApprovalCode int `mapstructure:"APPROVAL_CODE"`
+	// Approval Code returned from Card Suite FO (max 6 characters).
+	ApprovalCode string `mapstructure:"APPROVAL_CODE"`
 
 	// Masked card number.
 	CardNumber string `mapstructure:"CARD_NUMBER"`
