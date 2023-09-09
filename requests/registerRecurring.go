@@ -11,15 +11,15 @@ import (
 type RegisterRecurringType int
 
 const (
-	// RegisterRecurringSMS is a recurring transaction type which is initialized with an SMS transaction.
+	// RegisterRecurringSMS is a recurring transaction type which is initialized with an SMS transaction (-z).
 	// The resulting transaction should be confirmed with TransactionStatus (-c).
 	//
 	// This is the default transaction type.
 	RegisterRecurringSMS RegisterRecurringType = iota // default
-	// RegisterRecurringDMS is a recurring transaction type which is initialized with a DMS transaction.
+	// RegisterRecurringDMS is a recurring transaction type which is initialized with a DMS transaction (-d).
 	// The resulting transaction should be confirmed with TransactionStatus (-c), and executed with ExecuteDMS (-t).
 	RegisterRecurringDMS
-	// RegisterRecurringWithoutPayment is a recurring transaction type which is initialized without a transaction.
+	// RegisterRecurringWithoutPayment is a recurring transaction type which is initialized without a transaction (-p).
 	RegisterRecurringWithoutPayment
 )
 

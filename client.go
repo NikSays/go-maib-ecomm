@@ -9,13 +9,22 @@ import (
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// ECommClient is a client that implements methods for interaction with MAIB ECommerce API.
-type ECommClient struct {
+// Sender sends the EComm request, parses the response into a map,
+// and catches any errors during request execution.
+//
+// Useful if you want to substitute [Client] with a mock for testing.
+type Sender interface {
+	Send(req Request) (map[string]any, error)
+}
+
+// Client allows sending requests to MAIB ECommerce.
+// It is a [Sender] that uses a http.Client with mutual TLS to communicate with the merchant handler.
+type Client struct {
 	httpClient              http.Client
 	merchantHandlerEndpoint string
 }
 
-// Config is the configuration required to set up a [ECommClient].
+// Config is the configuration required to set up a [Client].
 type Config struct {
 	// Path to .pfx certificate issued by MAIB.
 	PFXPath string
@@ -25,8 +34,8 @@ type Config struct {
 	MerchantHandlerEndpoint string
 }
 
-// NewClient creates a new [ECommClient].
-func NewClient(config Config) (*ECommClient, error) {
+// NewClient creates a new [Client].
+func NewClient(config Config) (*Client, error) {
 	// Read pfx certificate
 	pfxBytes, err := os.ReadFile(config.PFXPath)
 	if err != nil {
@@ -58,7 +67,7 @@ func NewClient(config Config) (*ECommClient, error) {
 			TLSClientConfig: tlsConfig,
 		},
 	}
-	client := &ECommClient{
+	client := &Client{
 		httpClient:              httpClient,
 		merchantHandlerEndpoint: config.MerchantHandlerEndpoint,
 	}

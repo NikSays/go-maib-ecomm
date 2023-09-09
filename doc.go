@@ -10,10 +10,10 @@ To use this module you should:
 
 # Usage
 
-The main part of the module is the [ECommClient] struct. It contains an inner [http.Client] with Transport
-set up to support mTLS, which is required for communication with EComm.
+The main part of the module is the [Client] struct. It contains an inner [http.Client] with Transport
+set up to support mutual TLS, which is required for communication with EComm.
 
-The requests described in EComm documentation are implemented in "requests" directory. Running [ECommClient.Send] on a
+The requests described in EComm documentation are implemented in [requests] directory. Running [Client.Send] on a
 [Request] does the following:
  1. Validates the request
  2. Encodes it into a querystring
@@ -23,5 +23,7 @@ The requests described in EComm documentation are implemented in "requests" dire
 The response map can be decoded into a struct.
 
 See the example to get an understanding of the full flow.
+
+[requests]: https://pkg.go.dev/github.com/NikSays/go-maib-ecomm/requests
 */
 package maib

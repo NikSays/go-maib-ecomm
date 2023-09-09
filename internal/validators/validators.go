@@ -1,6 +1,4 @@
-/*
-Package validators provides functions to validate input without boilerplate.
-*/
+// Package validators provides functions to validate input without boilerplate.
 package validators
 
 import (

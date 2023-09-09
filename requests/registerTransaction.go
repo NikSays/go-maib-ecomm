@@ -11,12 +11,12 @@ import (
 type RegisterTransactionType int
 
 const (
-	// RegisterTransactionSMS is the Single Messaging System transaction type.
+	// RegisterTransactionSMS is the Single Messaging System transaction type (-v).
 	// Such a transaction is executed immediately and should be confirmed with TransactionStatus (-c).
 	//
 	// This is the default transaction type.
 	RegisterTransactionSMS RegisterTransactionType = iota
-	// RegisterTransactionDMS is the Double Messaging System transaction type.
+	// RegisterTransactionDMS is the Double Messaging System transaction type (-a).
 	// This transaction should be confirmed with TransactionStatus (-c),
 	// and executed with ExecuteDMS (-t).
 	RegisterTransactionDMS

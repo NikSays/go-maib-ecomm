@@ -22,7 +22,7 @@ type Request interface {
 
 // Send validates a [Request], and sends it to MAIB EComm servers.
 // The value returned on success can be parsed into a result struct using requests.DecodeResponse
-func (c ECommClient) Send(req Request) (map[string]any, error) {
+func (c Client) Send(req Request) (map[string]any, error) {
 	queryValues, err := req.Encode()
 	if err != nil {
 		return nil, err

@@ -1,4 +1,4 @@
-# Go MAIB ECommerce Bridge
+# Go MAIB ECommerce SDK
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/NikSays/go-maib-ecomm.svg)](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm)
 
@@ -25,6 +25,12 @@ shared by MAIB.
 Unlike other implementations, you don't need to run any `openssl` commands to change the certificate's format.
 Only the default `.pfx` pkcs#12 file is needed. 
 
----
+## Installation
 
+Inside your Go module, run
+```bash
+go get github.com/NikSays/go-maib-ecomm
+```
+
+## Documentation
 Documentation and examples are available at [Go Reference](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm).
