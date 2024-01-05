@@ -1,8 +1,9 @@
 package requests
 
 import (
-	"github.com/NikSays/go-maib-ecomm/types"
 	"net/url"
+
+	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 const closeDayCommand = "b"

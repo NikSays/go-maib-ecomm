@@ -3,15 +3,16 @@ package validators
 
 import (
 	"encoding/base64"
-	"github.com/NikSays/go-maib-ecomm/types"
 	"net"
 	"strconv"
+
+	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 // FieldValidator is the function used as argument to [Validate].
 type FieldValidator func() error
 
-// Validate runs argument functions until one of them returns an error.
+// Validate runs the argument functions until one of them returns an error.
 // Use any of the With... functions as arguments.
 func Validate(validators ...FieldValidator) error {
 	for _, v := range validators {

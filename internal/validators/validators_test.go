@@ -1,16 +1,17 @@
 package validators
 
 import (
-	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 const validTransactionID = "abcdefghijklmnopqrstuvwxyz1="
 
 func TestWithTransactionType(t *testing.T) {
-
 	cases := []struct {
 		name               string
 		transactionType    string
@@ -27,6 +28,7 @@ func TestWithTransactionType(t *testing.T) {
 			expectedErrorField: types.FieldCommand,
 		},
 	}
+
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			err := Validate(WithTransactionType(c.transactionType))

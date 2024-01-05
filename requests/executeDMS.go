@@ -1,10 +1,12 @@
 package requests
 
 import (
+	"net/url"
+
+	"github.com/google/go-querystring/query"
+
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/google/go-querystring/query"
-	"net/url"
 )
 
 const executeDMSCommand = "t"

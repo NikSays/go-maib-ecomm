@@ -1,10 +1,12 @@
 package requests
 
 import (
-	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 func TestExecuteDMS(t *testing.T) {

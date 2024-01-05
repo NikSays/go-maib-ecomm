@@ -5,13 +5,13 @@ package types
 type Currency int
 
 const (
-	// CurrencyMDL is ISO4217 code for Moldovan Lei.
+	// CurrencyMDL is the ISO4217 code for Moldovan Lei.
 	CurrencyMDL Currency = 498
 
-	// CurrencyEUR is ISO4217 code for Euro.
+	// CurrencyEUR is the ISO4217 code for Euro.
 	CurrencyEUR Currency = 978
 
-	// CurrencyUSD is ISO4217 code for United States Dollar.
+	// CurrencyUSD is the ISO4217 code for United States Dollar.
 	CurrencyUSD Currency = 840
 )
 
@@ -20,12 +20,7 @@ const (
 type Language string
 
 const (
-	// LanguageRomanian language identifier.
 	LanguageRomanian Language = "ro"
-
-	// LanguageRussian language identifier.
-	LanguageRussian Language = "ru"
-
-	// LanguageEnglish language identifier.
-	LanguageEnglish Language = "en"
+	LanguageRussian  Language = "ru"
+	LanguageEnglish  Language = "en"
 )
