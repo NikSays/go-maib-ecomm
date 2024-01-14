@@ -13,18 +13,19 @@ import (
 // Send validates a [Request], and sends it to the MAIB EComm system.
 // The value returned on success can be parsed into a result struct using requests.DecodeResponse
 func (c *client) Send(req Request) (map[string]any, error) {
-	queryValues, err := req.Values()
-	if err != nil {
-		return nil, err
-	}
 	// Validate request
-	err = req.Validate()
+	err := req.Validate()
 	if err != nil {
 		return nil, err
 	}
 
 	// Make request
 	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
+	if err != nil {
+		return nil, err
+	}
+
+	queryValues, err := req.Values()
 	if err != nil {
 		return nil, err
 	}
