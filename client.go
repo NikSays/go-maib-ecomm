@@ -6,25 +6,26 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// Sender sends the EComm request, parses the response into a map,
-// and catches any errors during request execution.
+// Sender allows sending requests to the MAIB EComm system.
 //
-// Useful if you want to substitute [Client] with a mock for testing.
+// Send validates the [Request] before sending it, and checks the response
+// for errors. The response is then parsed into a map that can be decoded
+// into a result struct using requests.DecodeResponse.
 type Sender interface {
 	Send(req Request) (map[string]any, error)
 }
 
-// Client allows sending requests to MAIB ECommerce.
-// It is a [Sender] that uses a http.Client with mutual TLS to communicate with the merchant handler.
-type Client struct {
-	httpClient              http.Client
+// client is the default [Sender].
+type client struct {
+	httpClient              *http.Client
 	merchantHandlerEndpoint string
 }
 
-// Config is the configuration required to set up a [Client].
+// Config is the configuration required to set up the default [Sender] implementation.
 type Config struct {
 	// Path to .pfx certificate issued by MAIB.
 	PFXPath string
@@ -34,8 +35,9 @@ type Config struct {
 	MerchantHandlerEndpoint string
 }
 
-// NewClient creates a new [Client].
-func NewClient(config Config) (*Client, error) {
+// NewClient creates a new instance of the default [Sender] that uses
+// HTTPS with mutual TLS to communicate with the MAIB EComm system.
+func NewClient(config Config) (Sender, error) {
 	// Read pfx certificate
 	pfxBytes, err := os.ReadFile(config.PFXPath)
 	if err != nil {
@@ -62,14 +64,13 @@ func NewClient(config Config) (*Client, error) {
 		ClientCAs:    caPool,
 		Certificates: []tls.Certificate{tlsCertificate},
 	}
-	httpClient := http.Client{
+	httpClient := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: tlsConfig,
 		},
 	}
-	client := &Client{
+	return &client{
 		httpClient:              httpClient,
 		merchantHandlerEndpoint: config.MerchantHandlerEndpoint,
-	}
-	return client, nil
+	}, nil
 }
