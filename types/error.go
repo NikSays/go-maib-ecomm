@@ -1,19 +1,33 @@
 package types
 
 import (
-	"errors"
 	"fmt"
 )
 
-// Errors encountered in response from MAIB EComm.
-var (
-	// ErrMAIB is returned when response from MAIB EComm starts with "error".
-	ErrMAIB = errors.New("MAIB EComm returned an error")
+// ErrParse is returned when response from MAIB EComm doesn't follow "KEY: value" format,
+// or when a field is of an unexpected type.
+type ErrParse struct {
+	// Underlying error
+	Reason error
+}
 
-	// ErrParse is returned when response from MAIB EComm doesn't follow "KEY: value" format,
-	// or when a field is of an unexpected type.
-	ErrParse = errors.New("couldn't parse response")
-)
+func (e ErrParse) Error() string {
+	return fmt.Sprintf("error parsing response: %s", e.Reason)
+}
+
+// ErrMAIB is returned when MAIB EComm responds with non-200 status,
+// or when the response body starts with "error".
+type ErrMAIB struct {
+	// HTTP status code
+	Code int
+
+	// Response body
+	Body string
+}
+
+func (e ErrMAIB) Error() string {
+	return fmt.Sprintf("maib ecomm returned %d: %s", e.Code, e.Body)
+}
 
 // ErrMalformedPayload is triggered before sending the request
 // to MAIB EComm, if an error was encountered in payload input.
@@ -26,5 +40,5 @@ type ErrMalformedPayload struct {
 }
 
 func (e ErrMalformedPayload) Error() string {
-	return fmt.Sprintf("malformed field %s (%s)", e.Field, e.Description)
+	return fmt.Sprintf("malformed field %s: %s", e.Field, e.Description)
 }

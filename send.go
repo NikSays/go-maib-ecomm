@@ -3,6 +3,7 @@ package maib
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -16,41 +17,47 @@ func (c *client) Send(req Request) (map[string]any, error) {
 	// Validate request
 	err := req.Validate()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error validating request: %w", err)
 	}
 
-	// Make request
+	// Send request
 	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error parsing url: %w", err)
 	}
 
 	queryValues, err := req.Values()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error encoding request: %w", err)
 	}
 	reqURL.RawQuery = queryValues.Encode()
 	res, err := c.httpClient.Post(reqURL.String(), "", nil)
 	if err != nil {
-		return nil, fmt.Errorf("couldn't complete request to MAIB EComm: %w", err)
+		return nil, fmt.Errorf("error sending request to MAIB EComm: %w", err)
 	}
 
 	// Read body
 	defer res.Body.Close()
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
-		return nil, fmt.Errorf("couldn't read response body: %w", err)
+		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
 	body := string(bodyBytes)
 
 	// Catch error
-	if strings.HasPrefix(body, "error") {
-		return nil, fmt.Errorf("%w: %s", types.ErrMAIB, body)
+	if res.StatusCode != http.StatusOK || strings.HasPrefix(body, "error") {
+		return nil, types.ErrMAIB{
+			Code: res.StatusCode,
+			Body: body,
+		}
 	}
 
 	result, err := parseBody(body)
+	if err != nil {
+		return nil, types.ErrParse{Reason: err}
+	}
 
-	return result, err
+	return result, nil
 }
 
 // parseBody splits each line as "key: value", converting types
@@ -64,13 +71,13 @@ func parseBody(body string) (map[string]any, error) {
 
 		parts := strings.Split(line, ": ")
 		if len(parts) != 2 {
-			return nil, fmt.Errorf("%w: wrong line format: \"%s\"", types.ErrParse, line)
+			return nil, fmt.Errorf("wrong line format: \"%s\"", line)
 		}
 
 		key, value := parts[0], parts[1]
 		parsedValue, err := parseField(key, value)
 		if err != nil {
-			return nil, fmt.Errorf("%w: wrong value type in \"%s\": %w", types.ErrParse, line, err)
+			return nil, fmt.Errorf("wrong value type in \"%s\": %w", line, err)
 		}
 
 		result[key] = parsedValue
