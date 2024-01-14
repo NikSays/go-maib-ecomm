@@ -51,7 +51,7 @@ type ExecuteDMSResult struct {
 	CardNumber string `mapstructure:"CARD_NUMBER"`
 }
 
-func (payload ExecuteDMS) Encode() (url.Values, error) {
+func (payload ExecuteDMS) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

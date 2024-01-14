@@ -48,7 +48,7 @@ type CloseDayResult struct {
 	DebitReversalAmount int `mapstructure:"FLD_089"`
 }
 
-func (CloseDay) Encode() (url.Values, error) {
+func (CloseDay) Values() (url.Values, error) {
 	v := url.Values{}
 	v.Set("command", closeDayCommand)
 	return v, nil

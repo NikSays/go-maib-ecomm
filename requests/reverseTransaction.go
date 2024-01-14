@@ -37,7 +37,7 @@ type ReverseTransactionResult struct {
 	ResultCode int `mapstructure:"RESULT_CODE"`
 }
 
-func (payload ReverseTransaction) Encode() (url.Values, error) {
+func (payload ReverseTransaction) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

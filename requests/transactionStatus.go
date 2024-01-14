@@ -60,7 +60,7 @@ type TransactionStatusResult struct {
 	RecurringPaymentExpiry string `mapstructure:"RECC_PMNT_EXPIRY"`
 }
 
-func (payload TransactionStatus) Encode() (url.Values, error) {
+func (payload TransactionStatus) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

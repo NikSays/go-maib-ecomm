@@ -24,7 +24,7 @@ type DeleteRecurringResult struct {
 	Result types.ResultEnum `mapstructure:"RESULT"`
 }
 
-func (payload DeleteRecurring) Encode() (url.Values, error) {
+func (payload DeleteRecurring) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

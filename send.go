@@ -10,21 +10,10 @@ import (
 	"github.com/NikSays/go-maib-ecomm/types"
 )
 
-// Request is a payload that can be sent to MAIB EComm server.
-type Request interface {
-	// Encode returns the payload as a URL value map, that can be encoded into necessary querystring
-	// to be sent to the EComm server.
-	Encode() (url.Values, error)
-
-	// Validate goes through the fields of the payload, and returns an error if any one of them
-	// does not fit the requirements.
-	Validate() error
-}
-
-// Send validates a [Request], and sends it to MAIB EComm servers.
+// Send validates a [Request], and sends it to the MAIB EComm system.
 // The value returned on success can be parsed into a result struct using requests.DecodeResponse
 func (c *client) Send(req Request) (map[string]any, error) {
-	queryValues, err := req.Encode()
+	queryValues, err := req.Values()
 	if err != nil {
 		return nil, err
 	}

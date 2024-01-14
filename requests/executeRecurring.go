@@ -52,7 +52,7 @@ type ExecuteRecurringResult struct {
 	ApprovalCode string `mapstructure:"APPROVAL_CODE"`
 }
 
-func (payload ExecuteRecurring) Encode() (url.Values, error) {
+func (payload ExecuteRecurring) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

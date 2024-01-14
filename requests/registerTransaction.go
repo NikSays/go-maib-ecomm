@@ -68,7 +68,7 @@ type RegisterTransactionResult struct {
 	TransactionID string `mapstructure:"TRANSACTION_ID"`
 }
 
-func (payload RegisterTransaction) Encode() (url.Values, error) {
+func (payload RegisterTransaction) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

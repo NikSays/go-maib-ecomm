@@ -31,9 +31,9 @@ func TestDeleteRecurring(t *testing.T) {
 			err := c.payload.Validate()
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
-				enc, err := c.payload.Encode()
+				val, err := c.payload.Values()
 				assert.Nil(t, err)
-				assert.Equal(t, c.expectedEncoded, enc.Encode())
+				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
 				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
 			}

@@ -5,10 +5,22 @@ import (
 	"crypto/x509"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 
 	"software.sslmate.com/src/go-pkcs12"
 )
+
+// Request is a payload that can be sent to the MAIB EComm system.
+type Request interface {
+	// Values returns the payload as a URL value map,
+	// that can be encoded into necessary querystring to be sent to the EComm system.
+	Values() (url.Values, error)
+
+	// Validate goes through the fields of the payload, and returns an error
+	// if any one of them does not fit the requirements.
+	Validate() error
+}
 
 // Sender allows sending requests to the MAIB EComm system.
 //

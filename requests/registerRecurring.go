@@ -83,7 +83,7 @@ type RegisterRecurringResult struct {
 	TransactionID string `mapstructure:"TRANSACTION_ID"`
 }
 
-func (payload RegisterRecurring) Encode() (url.Values, error) {
+func (payload RegisterRecurring) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err
