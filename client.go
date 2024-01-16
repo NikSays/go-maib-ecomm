@@ -14,7 +14,7 @@ import (
 // Request is a payload that can be sent to the MAIB EComm system.
 type Request interface {
 	// Values returns the payload as a URL value map,
-	// that can be encoded into necessary querystring to be sent to the EComm system.
+	// that can be encoded into a querystring to be sent to the EComm system.
 	Values() (url.Values, error)
 
 	// Validate goes through the fields of the payload, and returns an error
@@ -31,13 +31,17 @@ type Sender interface {
 	Send(req Request) (map[string]any, error)
 }
 
-// client is the default [Sender].
-type client struct {
+// Client is the default [Sender] that uses
+// HTTPS with mutual TLS to communicate with the MAIB EComm system.
+// It is safe for concurrent use.
+//
+// Must be initiated with [NewClient].
+type Client struct {
 	httpClient              *http.Client
 	merchantHandlerEndpoint string
 }
 
-// Config is the configuration required to set up the default [Sender] implementation.
+// Config is the configuration required to set up a [Client].
 type Config struct {
 	// Path to .pfx certificate issued by MAIB.
 	PFXPath string
@@ -47,9 +51,9 @@ type Config struct {
 	MerchantHandlerEndpoint string
 }
 
-// NewClient creates a new instance of the default [Sender] that uses
-// HTTPS with mutual TLS to communicate with the MAIB EComm system.
-func NewClient(config Config) (Sender, error) {
+// NewClient reads and parses the PFX certificate file and returns a *[Client]
+// that uses the certificate for mutual TLS.
+func NewClient(config Config) (*Client, error) {
 	// Read pfx certificate
 	pfxBytes, err := os.ReadFile(config.PFXPath)
 	if err != nil {
@@ -88,7 +92,7 @@ func NewClient(config Config) (Sender, error) {
 		return nil, fmt.Errorf("error parsing merchant handler endpoint: %w", err)
 	}
 
-	return &client{
+	return &Client{
 		httpClient:              httpClient,
 		merchantHandlerEndpoint: config.MerchantHandlerEndpoint,
 	}, nil

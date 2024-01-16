@@ -13,7 +13,7 @@ import (
 
 // Send validates a [Request], and sends it to the MAIB EComm system.
 // The value returned on success can be parsed into a result struct using requests.DecodeResponse
-func (c *client) Send(req Request) (map[string]any, error) {
+func (c *Client) Send(req Request) (map[string]any, error) {
 	// Validate request
 	err := req.Validate()
 	if err != nil {
