@@ -54,7 +54,10 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 
 	result, err := parseBody(body)
 	if err != nil {
-		return nil, types.ErrParse{Reason: err}
+		return nil, types.ErrParse{
+			Reason: err,
+			Body:   body,
+		}
 	}
 
 	return result, nil

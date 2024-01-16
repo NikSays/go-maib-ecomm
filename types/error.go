@@ -9,6 +9,9 @@ import (
 type ErrParse struct {
 	// Underlying error
 	Reason error
+
+	// Response body that couldn't be parsed
+	Body string
 }
 
 func (e ErrParse) Error() string {
