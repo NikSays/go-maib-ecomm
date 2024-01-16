@@ -27,8 +27,7 @@ type ReverseTransaction struct {
 	SuspectedFraud bool `url:"-"`
 }
 
-// ReverseTransactionResult contains data returned on reversal of a transaction,
-// if no error is encountered.
+// ReverseTransactionResult contains the response to a ReverseTransaction request.
 type ReverseTransactionResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`

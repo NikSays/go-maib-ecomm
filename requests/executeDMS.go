@@ -32,8 +32,7 @@ type ExecuteDMS struct {
 	Description string `url:"description,omitempty"`
 }
 
-// ExecuteDMSResult contains data returned on execution of an DMS transaction,
-// if no error is encountered.
+// ExecuteDMSResult contains the response to a ExecuteDMS request.
 type ExecuteDMSResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`

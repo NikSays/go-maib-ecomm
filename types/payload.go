@@ -1,7 +1,9 @@
 package types
 
-// Currency is an alias type for int. Valid values are 3 digit ISO4217 codes. The most common codes are exported by
+// Currency is an alias type for int. Valid values are 3 digit [ISO4217] codes. The most common codes are exported by
 // this package.
+//
+// [ISO4217]: https://www.six-group.com/en/products-services/financial-information/data-standards.html
 type Currency int
 
 const (
@@ -15,7 +17,7 @@ const (
 	CurrencyUSD Currency = 840
 )
 
-// Language is an alias type for string. Valid values are language identifiers, that the merchant has sent to
+// Language is an alias type for string. Valid values are language identifiers that the merchant has sent to
 // MAIB. The default identifiers are exported by this package.
 type Language string
 

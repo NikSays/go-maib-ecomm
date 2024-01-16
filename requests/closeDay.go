@@ -12,8 +12,7 @@ const closeDayCommand = "b"
 // This procedure must be initiated once a day. Recommended time is 23:59:00.
 type CloseDay struct{}
 
-// CloseDayResult contains data returned on closing of the business day,
-// if no error is encountered.
+// CloseDayResult contains the response to a CloseDay request.
 type CloseDayResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`

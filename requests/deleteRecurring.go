@@ -17,8 +17,7 @@ type DeleteRecurring struct {
 	BillerClientID string `url:"biller_client_id"`
 }
 
-// DeleteRecurringResult contains data returned on execution of a recurring transaction,
-// if no error is encountered.
+// DeleteRecurringResult contains the response to a DeleteRecurring request.
 type DeleteRecurringResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`

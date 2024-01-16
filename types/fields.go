@@ -1,8 +1,8 @@
 package types
 
+// PayloadField contains the names of the payload fields. Used in [ErrMalformedPayload].
 type PayloadField string
 
-// PayloadField contains the names of the payload fields. Used in [ErrMalformedPayload].
 const (
 	FieldTransactionID   PayloadField = "trans_id"
 	FieldAmount          PayloadField = "amount"

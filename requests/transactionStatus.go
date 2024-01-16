@@ -20,8 +20,7 @@ type TransactionStatus struct {
 	ClientIPAddress string `url:"client_ip_addr"`
 }
 
-// TransactionStatusResult contains data returned by transaction status request (-c),
-// if no error is encountered.
+// TransactionStatusResult contains the response to a TransactionStatus request.
 type TransactionStatusResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`
