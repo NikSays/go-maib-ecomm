@@ -15,6 +15,10 @@ func (e ErrParse) Error() string {
 	return fmt.Sprintf("error parsing response: %s", e.Reason)
 }
 
+func (e ErrParse) Unwrap() error {
+	return e.Reason
+}
+
 // ErrMAIB is returned when MAIB EComm responds with non-200 status,
 // or when the response body starts with "error".
 type ErrMAIB struct {
