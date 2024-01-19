@@ -133,7 +133,7 @@ func TestRegisterTransaction(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}

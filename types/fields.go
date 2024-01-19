@@ -1,6 +1,6 @@
 package types
 
-// PayloadField contains the names of the payload fields. Used in [ErrMalformedPayload].
+// PayloadField contains the names of the payload fields. Used in [ValidationError].
 type PayloadField string
 
 const (
