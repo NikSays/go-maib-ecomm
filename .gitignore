@@ -9,18 +9,14 @@
 
 # But not these files...
 !/.gitignore
-!/.gitlab-ci.yml
 
-!config/*
-config/.env
-
-!Dockerfile
-!.dockerignore
-!tests/docker-compose.yml
+!/.github/**
 
 !*.go
 !go.sum
 !go.mod
+
+!/testdata/**
 
 !README.md
 !LICENSE*

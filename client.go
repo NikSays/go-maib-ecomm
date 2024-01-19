@@ -5,22 +5,41 @@ import (
 	"crypto/x509"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
+
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// Sender sends the EComm request, parses the response into a map,
-// and catches any errors during request execution.
+// Request is a payload that can be sent to the ECommerce system.
+type Request interface {
+	// Values returns the payload as a URL value map,
+	// that can be encoded into a querystring to be sent to the ECommerce system.
+	Values() (url.Values, error)
+
+	// Validate goes through the fields of the payload, and returns an error
+	// if any one of them does not fit the requirements.
+	Validate() error
+}
+
+// Sender allows sending requests to the MAIB ECommerce system.
 //
-// Useful if you want to substitute [Client] with a mock for testing.
+// This interface is makes it easy to substitute [Client]
+// with a different behavior. E.g. using a mock for testing.
+//
+// Send validates the [Request] before sending it, and checks the response
+// for errors. The response is then parsed into a map that can be decoded
+// into a result struct using requests.DecodeResponse.
 type Sender interface {
 	Send(req Request) (map[string]any, error)
 }
 
-// Client allows sending requests to MAIB ECommerce.
-// It is a [Sender] that uses a http.Client with mutual TLS to communicate with the merchant handler.
+// Client is a [Sender] that uses HTTPS with mutual TLS to communicate
+// with the MAIB ECommerce system. It is safe for concurrent use.
+//
+// Must be initiated with [NewClient].
 type Client struct {
-	httpClient              http.Client
+	httpClient              *http.Client
 	merchantHandlerEndpoint string
 }
 
@@ -34,17 +53,18 @@ type Config struct {
 	MerchantHandlerEndpoint string
 }
 
-// NewClient creates a new [Client].
+// NewClient reads and parses the PFX certificate file and returns a *[Client]
+// that uses the certificate for mutual TLS.
 func NewClient(config Config) (*Client, error) {
 	// Read pfx certificate
 	pfxBytes, err := os.ReadFile(config.PFXPath)
 	if err != nil {
-		return nil, fmt.Errorf("could not read certificate: %w", err)
+		return nil, fmt.Errorf("error reading certificate: %w", err)
 	}
 	// Decode certificate
 	privateKey, certificate, caArray, err := pkcs12.DecodeChain(pfxBytes, config.Passphrase)
 	if err != nil {
-		return nil, fmt.Errorf("could not load certificate: %w", err)
+		return nil, fmt.Errorf("error loading certificate: %w", err)
 	}
 	// Parse CAs
 	caPool := x509.NewCertPool()
@@ -62,14 +82,20 @@ func NewClient(config Config) (*Client, error) {
 		ClientCAs:    caPool,
 		Certificates: []tls.Certificate{tlsCertificate},
 	}
-	httpClient := http.Client{
+	httpClient := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: tlsConfig,
 		},
 	}
-	client := &Client{
+
+	// Parse merchantHandlerEndpoint to check for malformed URL before any actual requests
+	_, err = url.Parse(config.MerchantHandlerEndpoint)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing merchant handler endpoint: %w", err)
+	}
+
+	return &Client{
 		httpClient:              httpClient,
 		merchantHandlerEndpoint: config.MerchantHandlerEndpoint,
-	}
-	return client, nil
+	}, nil
 }

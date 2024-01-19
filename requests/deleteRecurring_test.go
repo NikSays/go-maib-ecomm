@@ -1,9 +1,11 @@
 package requests
 
 import (
-	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 func TestDeleteRecurring(t *testing.T) {
@@ -29,11 +31,11 @@ func TestDeleteRecurring(t *testing.T) {
 			err := c.payload.Validate()
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
-				enc, err := c.payload.Encode()
+				val, err := c.payload.Values()
 				assert.Nil(t, err)
-				assert.Equal(t, c.expectedEncoded, enc.Encode())
+				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}

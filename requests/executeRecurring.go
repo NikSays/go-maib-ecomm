@@ -1,10 +1,12 @@
 package requests
 
 import (
+	"net/url"
+
+	"github.com/google/go-querystring/query"
+
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/google/go-querystring/query"
-	"net/url"
 )
 
 const executeRecurringCommand = "e"
@@ -31,8 +33,7 @@ type ExecuteRecurring struct {
 	BillerClientID string `url:"biller_client_id"`
 }
 
-// ExecuteRecurringResult contains data returned on execution of a recurring transaction,
-// if no error is encountered.
+// ExecuteRecurringResult contains the response to a ExecuteRecurring request.
 type ExecuteRecurringResult struct {
 	// ID of the executed transaction. 28 symbols in base64.
 	TransactionID string `mapstructure:"TRANSACTION_ID"`
@@ -50,7 +51,7 @@ type ExecuteRecurringResult struct {
 	ApprovalCode string `mapstructure:"APPROVAL_CODE"`
 }
 
-func (payload ExecuteRecurring) Encode() (url.Values, error) {
+func (payload ExecuteRecurring) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

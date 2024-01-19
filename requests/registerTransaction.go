@@ -1,10 +1,12 @@
 package requests
 
 import (
+	"net/url"
+
+	"github.com/google/go-querystring/query"
+
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/google/go-querystring/query"
-	"net/url"
 )
 
 // RegisterTransactionType holds possible types for recurring transaction.
@@ -16,13 +18,14 @@ const (
 	//
 	// This is the default transaction type.
 	RegisterTransactionSMS RegisterTransactionType = iota
+
 	// RegisterTransactionDMS is the Double Messaging System transaction type (-a).
 	// This transaction should be confirmed with TransactionStatus (-c),
 	// and executed with ExecuteDMS (-t).
 	RegisterTransactionDMS
 )
 
-// String converts RegisterTransactionType into the EComm command.
+// String converts RegisterTransactionType into the ECommerce command.
 // Returns an empty string for unknown values.
 func (t RegisterTransactionType) String() string {
 	switch t {
@@ -59,14 +62,13 @@ type RegisterTransaction struct {
 	Language types.Language `url:"language"`
 }
 
-// RegisterTransactionResult contains data returned on execution of a transaction registration request,
-// if no error is encountered.
+// RegisterTransactionResult contains the response to a RegisterTransaction request.
 type RegisterTransactionResult struct {
 	// ID of the created transaction. 28 symbols in base64.
 	TransactionID string `mapstructure:"TRANSACTION_ID"`
 }
 
-func (payload RegisterTransaction) Encode() (url.Values, error) {
+func (payload RegisterTransaction) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

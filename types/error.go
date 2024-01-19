@@ -1,23 +1,45 @@
 package types
 
 import (
-	"errors"
 	"fmt"
 )
 
-// Errors encountered in response from MAIB EComm.
-var (
-	// ErrMAIB is returned when response from MAIB EComm starts with "error".
-	ErrMAIB = errors.New("MAIB EComm returned an error")
+// ParseError is returned when the response from the ECommerce system
+// doesn't follow "KEY: value" format, or when a field has an unexpected type .
+type ParseError struct {
+	// Underlying error
+	Err error
 
-	// ErrParse is returned when response from MAIB EComm doesn't follow "KEY: value" format,
-	// or when a field is of an unexpected type.
-	ErrParse = errors.New("couldn't parse response")
-)
+	// Response body that couldn't be parsed
+	Body string
+}
 
-// ErrMalformedPayload is triggered before sending the request
-// to MAIB EComm, if an error was encountered in payload input.
-type ErrMalformedPayload struct {
+func (e ParseError) Error() string {
+	return fmt.Sprintf("error parsing response: %s", e.Err)
+}
+
+// Unwrap returns the underlying error, for usage with errors.As.
+func (e ParseError) Unwrap() error {
+	return e.Err
+}
+
+// ECommError is returned when the ECommerce system responds with
+// a non-200 status, or when the response body starts with "error:".
+type ECommError struct {
+	// HTTP status code
+	Code int
+
+	// Response body
+	Body string
+}
+
+func (e ECommError) Error() string {
+	return fmt.Sprintf("maib ecomm returned %d: %s", e.Code, e.Body)
+}
+
+// ValidationError is triggered before sending the request to the
+// ECommerce system, if the request has failed validation.
+type ValidationError struct {
 	// Which field is malformed.
 	Field PayloadField
 
@@ -25,6 +47,6 @@ type ErrMalformedPayload struct {
 	Description string
 }
 
-func (e ErrMalformedPayload) Error() string {
-	return fmt.Sprintf("malformed field %s (%s)", e.Field, e.Description)
+func (e ValidationError) Error() string {
+	return fmt.Sprintf("malformed field %s: %s", e.Field, e.Description)
 }

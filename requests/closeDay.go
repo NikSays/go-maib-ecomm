@@ -1,8 +1,9 @@
 package requests
 
 import (
-	"github.com/NikSays/go-maib-ecomm/types"
 	"net/url"
+
+	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 const closeDayCommand = "b"
@@ -11,8 +12,7 @@ const closeDayCommand = "b"
 // This procedure must be initiated once a day. Recommended time is 23:59:00.
 type CloseDay struct{}
 
-// CloseDayResult contains data returned on closing of the business day,
-// if no error is encountered.
+// CloseDayResult contains the response to a CloseDay request.
 type CloseDayResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`
@@ -47,7 +47,7 @@ type CloseDayResult struct {
 	DebitReversalAmount int `mapstructure:"FLD_089"`
 }
 
-func (CloseDay) Encode() (url.Values, error) {
+func (CloseDay) Values() (url.Values, error) {
 	v := url.Values{}
 	v.Set("command", closeDayCommand)
 	return v, nil
