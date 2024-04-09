@@ -1,35 +1,35 @@
 package types
 
-// ResultEnum holds possible values for RESULT field in response from MAIB EComm system.
+// ResultEnum holds the possible values of the RESULT field returned by the ECommerce system.
 type ResultEnum string
 
 const (
-	// ResultOk - the transaction is successfully completed.
+	// ResultOk - the transaction has successfully completed.
 	ResultOk ResultEnum = "OK"
 
 	// ResultFailed - the transaction has failed.
 	ResultFailed ResultEnum = "FAILED"
 
-	// ResultCreated - the transaction is just registered in the system. Client didn't input card information yet.
+	// ResultCreated - the transaction is just registered in the system. Client didn't input their card information yet.
 	ResultCreated ResultEnum = "CREATED"
 
-	// ResultPending - the transaction is not completed yet.
+	// ResultPending - the transaction is not complete yet.
 	ResultPending ResultEnum = "PENDING"
 
-	// ResultDeclined - the transaction is declined by EComm.
+	// ResultDeclined - the transaction was declined by EComm.
 	ResultDeclined ResultEnum = "DECLINED"
 
-	// ResultReversed - the transaction is reversed.
+	// ResultReversed - the transaction was reversed.
 	ResultReversed ResultEnum = "REVERSED"
 
-	// ResultAutoReversed - the transaction is reversed by autoreversal.
+	// ResultAutoReversed - the transaction was reversed by autoreversal.
 	ResultAutoReversed ResultEnum = "AUTOREVERSED"
 
-	// ResultTimeout - the transaction was timed out.
+	// ResultTimeout - the transaction has timed out.
 	ResultTimeout ResultEnum = "TIMEOUT"
 )
 
-// ResultPSEnum holds possible values for RESULT_PS field in response from MAIB EComm system.
+// ResultPSEnum holds the possible values for the RESULT_PS field returned by the ECommerce system.
 type ResultPSEnum string
 
 const (

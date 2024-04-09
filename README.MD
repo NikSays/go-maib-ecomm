@@ -28,9 +28,17 @@ Only the default `.pfx` pkcs#12 file is needed.
 ## Installation
 
 Inside your Go module, run
-```bash
+```shell
 go get github.com/NikSays/go-maib-ecomm
 ```
 
 ## Documentation
+
 Documentation and examples are available at [Go Reference](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm).
+
+## Testing
+
+If you need to regenerate the testing certificates, run the `./genCrt.sh` script
+in the ./testdata folder.
+
+To test the package just run `go test ./... `.

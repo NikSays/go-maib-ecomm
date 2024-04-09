@@ -1,10 +1,12 @@
 package requests
 
 import (
+	"net/url"
+
+	"github.com/google/go-querystring/query"
+
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/google/go-querystring/query"
-	"net/url"
 )
 
 // RegisterRecurringType holds possible types for recurring transaction.
@@ -15,15 +17,17 @@ const (
 	// The resulting transaction should be confirmed with TransactionStatus (-c).
 	//
 	// This is the default transaction type.
-	RegisterRecurringSMS RegisterRecurringType = iota // default
+	RegisterRecurringSMS RegisterRecurringType = iota
+
 	// RegisterRecurringDMS is a recurring transaction type which is initialized with a DMS transaction (-d).
 	// The resulting transaction should be confirmed with TransactionStatus (-c), and executed with ExecuteDMS (-t).
 	RegisterRecurringDMS
+
 	// RegisterRecurringWithoutPayment is a recurring transaction type which is initialized without a transaction (-p).
 	RegisterRecurringWithoutPayment
 )
 
-// String converts RegisterRecurringType into the EComm command.
+// String converts RegisterRecurringType into the ECommerce command.
 // Returns an empty string for unknown values.
 func (t RegisterRecurringType) String() string {
 	switch t {
@@ -74,14 +78,13 @@ type RegisterRecurring struct {
 	OverwriteExisting bool `url:"-"`
 }
 
-// RegisterRecurringResult contains data returned after registration of a recurring transaction,
-// if no error is encountered.
+// RegisterRecurringResult contains the response to a RegisterRecurring request.
 type RegisterRecurringResult struct {
 	// ID of the created transaction. 28 symbols in base64.
 	TransactionID string `mapstructure:"TRANSACTION_ID"`
 }
 
-func (payload RegisterRecurring) Encode() (url.Values, error) {
+func (payload RegisterRecurring) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

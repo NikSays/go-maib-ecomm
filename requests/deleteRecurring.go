@@ -1,10 +1,12 @@
 package requests
 
 import (
+	"net/url"
+
+	"github.com/google/go-querystring/query"
+
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/google/go-querystring/query"
-	"net/url"
 )
 
 const deleteRecurringCommand = "x"
@@ -15,14 +17,13 @@ type DeleteRecurring struct {
 	BillerClientID string `url:"biller_client_id"`
 }
 
-// DeleteRecurringResult contains data returned on execution of a recurring transaction,
-// if no error is encountered.
+// DeleteRecurringResult contains the response to a DeleteRecurring request.
 type DeleteRecurringResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`
 }
 
-func (payload DeleteRecurring) Encode() (url.Values, error) {
+func (payload DeleteRecurring) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

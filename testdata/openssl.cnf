@@ -1,0 +1,22 @@
+[ req ]
+ prompt = no
+ days   = 9999
+ distinguished_name = req_distinguished_name
+ x509_extensions	= v3_ca
+
+# To disable the prompt
+[ req_distinguished_name ]
+ countryName         = AQ
+ stateOrProvinceName = test
+ organizationName    = test
+
+# Add SAN so that the certificate is valid for 127.0.0.1
+[ v3_req ]
+ subjectKeyIdentifier   = hash
+ subjectAltName         = IP:127.0.0.1
+
+# Copied from global config, otherwise x509 certs are not CAs
+[ v3_ca ]
+ subjectKeyIdentifier=hash
+ authorityKeyIdentifier=keyid:always,issuer
+ basicConstraints = critical,CA:true

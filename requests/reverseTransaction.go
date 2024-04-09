@@ -1,10 +1,12 @@
 package requests
 
 import (
+	"net/url"
+
+	"github.com/google/go-querystring/query"
+
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/google/go-querystring/query"
-	"net/url"
 )
 
 const reverseTransactionCommand = "r"
@@ -25,8 +27,7 @@ type ReverseTransaction struct {
 	SuspectedFraud bool `url:"-"`
 }
 
-// ReverseTransactionResult contains data returned on reversal of a transaction,
-// if no error is encountered.
+// ReverseTransactionResult contains the response to a ReverseTransaction request.
 type ReverseTransactionResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`
@@ -35,7 +36,7 @@ type ReverseTransactionResult struct {
 	ResultCode int `mapstructure:"RESULT_CODE"`
 }
 
-func (payload ReverseTransaction) Encode() (url.Values, error) {
+func (payload ReverseTransaction) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

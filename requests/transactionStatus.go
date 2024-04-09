@@ -1,10 +1,12 @@
 package requests
 
 import (
+	"net/url"
+
+	"github.com/google/go-querystring/query"
+
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
 	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/google/go-querystring/query"
-	"net/url"
 )
 
 const transactionStatusCommand = "c"
@@ -18,8 +20,7 @@ type TransactionStatus struct {
 	ClientIPAddress string `url:"client_ip_addr"`
 }
 
-// TransactionStatusResult contains data returned by transaction status request (-c),
-// if no error is encountered.
+// TransactionStatusResult contains the response to a TransactionStatus request.
 type TransactionStatusResult struct {
 	// Transaction result status.
 	Result types.ResultEnum `mapstructure:"RESULT"`
@@ -58,7 +59,7 @@ type TransactionStatusResult struct {
 	RecurringPaymentExpiry string `mapstructure:"RECC_PMNT_EXPIRY"`
 }
 
-func (payload TransactionStatus) Encode() (url.Values, error) {
+func (payload TransactionStatus) Values() (url.Values, error) {
 	v, err := query.Values(payload)
 	if err != nil {
 		return nil, err

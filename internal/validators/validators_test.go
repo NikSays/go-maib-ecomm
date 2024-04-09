@@ -1,16 +1,17 @@
 package validators
 
 import (
-	"github.com/NikSays/go-maib-ecomm/types"
-	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 const validTransactionID = "abcdefghijklmnopqrstuvwxyz1="
 
 func TestWithTransactionType(t *testing.T) {
-
 	cases := []struct {
 		name               string
 		transactionType    string
@@ -27,13 +28,14 @@ func TestWithTransactionType(t *testing.T) {
 			expectedErrorField: types.FieldCommand,
 		},
 	}
+
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			err := Validate(WithTransactionType(c.transactionType))
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -70,7 +72,7 @@ func TestWithTransactionID(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -120,7 +122,7 @@ func TestWithAmount(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -154,7 +156,7 @@ func TestWithCurrency(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -183,7 +185,7 @@ func TestWithClientIPAddress(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -219,7 +221,7 @@ func TestWithLanguage(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -271,7 +273,7 @@ func TestWithBillerClientID(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -330,7 +332,7 @@ func TestWithPerspayeeExpiry(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}
@@ -366,7 +368,7 @@ func TestWithDescription(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ErrMalformedPayload).Field)
+				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
 			}
 		})
 	}

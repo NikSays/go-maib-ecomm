@@ -1,26 +1,29 @@
 /*
-Package maib provides tools to interact with MAIB ECommerce in a type safe way.
+Package maib provides tools to interact with the MAIB ECommerce system in a type safe way.
 
 # Requirements
 
 To use this module you should:
-  - Understand how MAIB EComm works
+  - Understand how MAIB ECommerce works
   - Have a .pfx certificate
   - Register as a merchant in MAIB
 
 # Usage
 
-The main part of the module is the [Client] struct. It contains an inner [http.Client] with Transport
-set up to support mutual TLS, which is required for communication with EComm.
+ 1. Use [NewClient] to set up a [Client] that communicates with the MAIB ECommerce system.
+ 2. Send a [Request] with [Client.Send] (The requests described in the ECommerce
+    documentation are implemented in the requests package).
+ 3. Decode the returned map into a result struct with requests.DecodeResult.
 
-The requests described in EComm documentation are implemented in [requests] directory. Running [Client.Send] on a
-[Request] does the following:
- 1. Validates the request
- 2. Encodes it into a querystring
- 3. Sends it to the MAIB EComm server
- 4. Decodes the response into map[string]any
+# Error Handling
 
-The response map can be decoded into a struct.
+Use errors.As to check the type and the contents of the errors returned by [Client.Send]:
+  - types.ErrMalformedPayload is returned before sending the request if it
+    has failed validation.
+  - types.ErrMAIB is returned if the response has a non-200 code, or its
+    body starts with "error:".
+  - types.ErrParse is returned if the response has an invalid structure, or
+    a response field has an unexpected datatype.
 
 See the example to get an understanding of the full flow.
 
