@@ -3,7 +3,8 @@ set -euo pipefail
 mkdir -p certs
 
 echo Generating CA
-openssl req -new -x509 -config openssl.cnf \
+openssl req -new -x509 -days 9999 \
+  -config openssl.cnf \
   -keyout certs/ca.key -out certs/ca.crt \
   -passout pass:password
 
