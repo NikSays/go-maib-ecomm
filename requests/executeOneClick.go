@@ -56,6 +56,7 @@ func (payload ExecuteOneClick) Values() (url.Values, error) {
 	if err != nil {
 		return nil, err
 	}
+	v.Set("oneclick", "Y")
 	v.Set("command", executeOneClickCommand)
 	return v, nil
 }
