@@ -88,6 +88,7 @@ func (payload RegisterOneClick) Values() (url.Values, error) {
 	}
 
 	// todo add param here and in recurring
+	// todo test
 	// v.Set("ask_save_card_data", "True")
 	v.Set("oneclick", "Y")
 
