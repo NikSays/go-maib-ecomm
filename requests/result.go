@@ -5,9 +5,9 @@ import (
 )
 
 type resultTypes interface {
-	CloseDayResult | DeleteRecurringResult | ExecuteDMSResult |
-		ExecuteRecurringResult | RegisterRecurringResult | RegisterTransactionResult |
-		ReverseTransactionResult | TransactionStatusResult
+	CloseDayResult | DeleteRecurringResult | ExecuteDMSResult | ExecuteOneClickResult |
+		ExecuteRecurringResult | RegisterRecurringResult | RegisterOneClickResult |
+		RegisterTransactionResult | ReverseTransactionResult | TransactionStatusResult
 }
 
 // DecodeResponse is a generic function that parses the map returned from the ECommerce system
