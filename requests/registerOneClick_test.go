@@ -9,17 +9,17 @@ import (
 	"github.com/NikSays/go-maib-ecomm/types"
 )
 
-func TestRegisterRecurring(t *testing.T) {
+func TestOneClick(t *testing.T) {
 	cases := []struct {
 		name               string
-		payload            RegisterRecurring
+		payload            RegisterOneClick
 		expectedErrorField types.PayloadField
 		expectedEncoded    string
 	}{
 		{
 			name: "OK SMS",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
@@ -29,27 +29,12 @@ func TestRegisterRecurring(t *testing.T) {
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedEncoded: "amount=1234&biller_client_id=biller&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_gen=1",
-		},
-		{
-			name: "OK DMS",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringDMS,
-				Amount:            1234,
-				Currency:          types.CurrencyMDL,
-				ClientIPAddress:   "127.0.0.1",
-				Description:       "Description",
-				Language:          types.LanguageEnglish,
-				BillerClientID:    "biller",
-				PerspayeeExpiry:   "1224",
-				OverwriteExisting: false,
-			},
-			expectedEncoded: "amount=1234&biller_client_id=biller&client_ip_addr=127.0.0.1&command=d&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_gen=1",
+			expectedEncoded: "amount=1234&biller_client_id=biller&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&oneclick=Y&perspayee_expiry=1224&perspayee_gen=1",
 		},
 		{
 			name: "OK no BillerClientID",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
@@ -58,12 +43,12 @@ func TestRegisterRecurring(t *testing.T) {
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedEncoded: "amount=1234&biller_client_id=&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_gen=1",
+			expectedEncoded: "amount=1234&biller_client_id=&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&oneclick=Y&perspayee_expiry=1224&perspayee_gen=1",
 		},
 		{
 			name: "OK overwrite",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
@@ -73,12 +58,12 @@ func TestRegisterRecurring(t *testing.T) {
 				BillerClientID:    "biller",
 				OverwriteExisting: true,
 			},
-			expectedEncoded: "amount=1234&biller_client_id=biller&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_overwrite=1",
+			expectedEncoded: "amount=1234&biller_client_id=biller&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&oneclick=Y&perspayee_expiry=1224&perspayee_overwrite=1",
 		},
 		{
 			name: "OK ask save",
-			payload: RegisterRecurring{
-				TransactionType: RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType: RegisterOneClickSMS,
 				Amount:          1234,
 				Currency:        types.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
@@ -88,12 +73,12 @@ func TestRegisterRecurring(t *testing.T) {
 				BillerClientID:  "biller",
 				AskSaveCardData: true,
 			},
-			expectedEncoded: "amount=1234&ask_save_card_data=True&biller_client_id=biller&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_gen=1",
+			expectedEncoded: "amount=1234&ask_save_card_data=True&biller_client_id=biller&client_ip_addr=127.0.0.1&command=z&currency=498&description=Description&language=en&oneclick=Y&perspayee_expiry=1224&perspayee_gen=1",
 		},
 		{
 			name: "OK without payment",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringWithoutPayment,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickWithoutPayment,
 				Amount:            0,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
@@ -103,11 +88,11 @@ func TestRegisterRecurring(t *testing.T) {
 				BillerClientID:    "biller",
 				OverwriteExisting: false,
 			},
-			expectedEncoded: "biller_client_id=biller&client_ip_addr=127.0.0.1&command=p&currency=498&description=Description&language=en&perspayee_expiry=1224&perspayee_gen=1",
+			expectedEncoded: "biller_client_id=biller&client_ip_addr=127.0.0.1&command=p&currency=498&description=Description&language=en&oneclick=Y&perspayee_expiry=1224&perspayee_gen=1",
 		},
 		{
 			name: "TransactionType invalid",
-			payload: RegisterRecurring{
+			payload: RegisterOneClick{
 				TransactionType:   -9,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
@@ -122,8 +107,8 @@ func TestRegisterRecurring(t *testing.T) {
 		},
 		{
 			name: "Amount invalid",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            0,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
@@ -137,8 +122,8 @@ func TestRegisterRecurring(t *testing.T) {
 		},
 		{
 			name: "Currency invalid",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          1000,
 				ClientIPAddress:   "127.0.0.1",
@@ -152,8 +137,8 @@ func TestRegisterRecurring(t *testing.T) {
 		},
 		{
 			name: "ClientIPAddress invalid",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "927.0.0.1",
@@ -167,8 +152,8 @@ func TestRegisterRecurring(t *testing.T) {
 		},
 		{
 			name: "Description invalid",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
@@ -182,8 +167,8 @@ func TestRegisterRecurring(t *testing.T) {
 		},
 		{
 			name: "Language invalid",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
@@ -197,8 +182,8 @@ func TestRegisterRecurring(t *testing.T) {
 		},
 		{
 			name: "PerspayeeExpiry invalid",
-			payload: RegisterRecurring{
-				TransactionType:   RegisterRecurringSMS,
+			payload: RegisterOneClick{
+				TransactionType:   RegisterOneClickSMS,
 				Amount:            1234,
 				Currency:          types.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",

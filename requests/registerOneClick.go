@@ -73,6 +73,11 @@ type RegisterOneClick struct {
 	// Whether the oneClick transaction with a given BillerClientID should be updated.
 	// This way, same BillerClientID may be used when customer changes payment information.
 	OverwriteExisting bool `url:"-"`
+
+	// If true, there will be a checkbox on the client handler. The card will be saved
+	// only if the checkbox is checked. The field TransactionStatusResult.RecurringPaymentID
+	// will be set only if the card is saved.
+	AskSaveCardData bool `url:"-"`
 }
 
 // RegisterOneClickResult contains the response to a RegisterOneClick request.
@@ -87,14 +92,16 @@ func (payload RegisterOneClick) Values() (url.Values, error) {
 		return nil, err
 	}
 
-	// todo add param here and in recurring
-	// todo test
-	// v.Set("ask_save_card_data", "True")
 	v.Set("oneclick", "Y")
 
-	v.Set("perspayee_gen", "1")
+	if payload.AskSaveCardData {
+		v.Set("ask_save_card_data", "True")
+	}
+
 	if payload.OverwriteExisting {
 		v.Set("perspayee_overwrite", "1")
+	} else {
+		v.Set("perspayee_gen", "1")
 	}
 
 	// Amount not needed for -p
