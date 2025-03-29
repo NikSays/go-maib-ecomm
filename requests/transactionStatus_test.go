@@ -5,14 +5,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 func TestTransactionStatus(t *testing.T) {
 	cases := []struct {
 		name               string
 		payload            TransactionStatus
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 		expectedEncoded    string
 	}{
 		{
@@ -30,7 +30,7 @@ func TestTransactionStatus(t *testing.T) {
 				TransactionID:   "",
 				ClientIPAddress: "127.0.0.1",
 			},
-			expectedErrorField: types.FieldTransactionID,
+			expectedErrorField: maib.FieldTransactionID,
 		},
 		{
 			name: "ClientIPAddress invalid",
@@ -38,7 +38,7 @@ func TestTransactionStatus(t *testing.T) {
 				TransactionID:   "abcdefghijklmnopqrstuvwxyz1=",
 				ClientIPAddress: "927.0.0.1",
 			},
-			expectedErrorField: types.FieldClientIPAddress,
+			expectedErrorField: maib.FieldClientIPAddress,
 		},
 	}
 	for _, c := range cases {
@@ -50,7 +50,7 @@ func TestTransactionStatus(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}

@@ -5,8 +5,8 @@ import (
 
 	"github.com/google/go-querystring/query"
 
+	"github.com/NikSays/go-maib-ecomm"
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
-	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 // RegisterRecurringType holds possible types for recurring transaction.
@@ -55,7 +55,7 @@ type RegisterRecurring struct {
 	Amount uint `url:"amount"`
 
 	// Transaction currency in ISO4217 3 digit format.
-	Currency types.Currency `url:"currency"`
+	Currency maib.Currency `url:"currency"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
 	ClientIPAddress string `url:"client_ip_addr"`
@@ -64,7 +64,7 @@ type RegisterRecurring struct {
 	Description string `url:"description,omitempty"`
 
 	// Language in which the bank payment page will be displayed.
-	Language types.Language `url:"language"`
+	Language maib.Language `url:"language"`
 
 	// Identifier of the recurring payment. If not specified,
 	// resulting TRANSACTION_ID will be used as the recurring payment ID.

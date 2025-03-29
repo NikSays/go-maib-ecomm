@@ -5,14 +5,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 func TestDeleteRecurring(t *testing.T) {
 	cases := []struct {
 		name               string
 		payload            DeleteRecurring
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 		expectedEncoded    string
 	}{
 		{
@@ -23,7 +23,7 @@ func TestDeleteRecurring(t *testing.T) {
 		{
 			name:               "BillerClientID invalid",
 			payload:            DeleteRecurring{BillerClientID: ""},
-			expectedErrorField: types.FieldBillerClientID,
+			expectedErrorField: maib.FieldBillerClientID,
 		},
 	}
 	for _, c := range cases {
@@ -35,7 +35,7 @@ func TestDeleteRecurring(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}

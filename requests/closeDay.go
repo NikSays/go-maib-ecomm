@@ -3,7 +3,7 @@ package requests
 import (
 	"net/url"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 const closeDayCommand = "b"
@@ -15,7 +15,7 @@ type CloseDay struct{}
 // CloseDayResult contains the response to a CloseDay request.
 type CloseDayResult struct {
 	// Transaction result status.
-	Result types.ResultEnum `mapstructure:"RESULT"`
+	Result maib.ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`

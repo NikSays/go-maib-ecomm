@@ -1,4 +1,4 @@
-package types
+package maib
 
 // ResultEnum holds the possible values of the RESULT field returned by the ECommerce system.
 type ResultEnum string

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 const validTransactionID = "abcdefghijklmnopqrstuvwxyz1="
@@ -15,7 +15,7 @@ func TestWithTransactionType(t *testing.T) {
 	cases := []struct {
 		name               string
 		transactionType    string
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
@@ -25,7 +25,7 @@ func TestWithTransactionType(t *testing.T) {
 		{
 			name:               "Invalid type",
 			transactionType:    "",
-			expectedErrorField: types.FieldCommand,
+			expectedErrorField: maib.FieldCommand,
 		},
 	}
 
@@ -35,7 +35,7 @@ func TestWithTransactionType(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -48,7 +48,7 @@ func TestWithTransactionID(t *testing.T) {
 	cases := []struct {
 		name               string
 		transactionID      string
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
@@ -58,12 +58,12 @@ func TestWithTransactionID(t *testing.T) {
 		{
 			name:               "Invalid length",
 			transactionID:      "",
-			expectedErrorField: types.FieldTransactionID,
+			expectedErrorField: maib.FieldTransactionID,
 		},
 		{
 			name:               "Not base64",
 			transactionID:      invalidTransactionID,
-			expectedErrorField: types.FieldTransactionID,
+			expectedErrorField: maib.FieldTransactionID,
 		},
 	}
 	for _, c := range cases {
@@ -72,7 +72,7 @@ func TestWithTransactionID(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -83,7 +83,7 @@ func TestWithAmount(t *testing.T) {
 		name               string
 		amount             uint
 		required           bool
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
@@ -101,19 +101,19 @@ func TestWithAmount(t *testing.T) {
 			name:               "Too small",
 			amount:             0,
 			required:           true,
-			expectedErrorField: types.FieldAmount,
+			expectedErrorField: maib.FieldAmount,
 		},
 		{
 			name:               "Too big",
 			amount:             1000000000000,
 			required:           true,
-			expectedErrorField: types.FieldAmount,
+			expectedErrorField: maib.FieldAmount,
 		},
 		{
 			name:               "Too big (not required)",
 			amount:             1000000000000,
 			required:           false,
-			expectedErrorField: types.FieldAmount,
+			expectedErrorField: maib.FieldAmount,
 		},
 	}
 	for _, c := range cases {
@@ -122,7 +122,7 @@ func TestWithAmount(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -131,23 +131,23 @@ func TestWithAmount(t *testing.T) {
 func TestWithCurrency(t *testing.T) {
 	cases := []struct {
 		name               string
-		currency           types.Currency
-		expectedErrorField types.PayloadField
+		currency           maib.Currency
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
-			currency:           types.CurrencyMDL,
+			currency:           maib.CurrencyMDL,
 			expectedErrorField: "",
 		},
 		{
 			name:               "Negative",
 			currency:           -1,
-			expectedErrorField: types.FieldCurrency,
+			expectedErrorField: maib.FieldCurrency,
 		},
 		{
 			name:               "too big",
 			currency:           1000,
-			expectedErrorField: types.FieldCurrency,
+			expectedErrorField: maib.FieldCurrency,
 		},
 	}
 	for _, c := range cases {
@@ -156,7 +156,7 @@ func TestWithCurrency(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -166,7 +166,7 @@ func TestWithClientIPAddress(t *testing.T) {
 	cases := []struct {
 		name               string
 		clientIPAddress    string
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
@@ -176,7 +176,7 @@ func TestWithClientIPAddress(t *testing.T) {
 		{
 			name:               "Invalid IP",
 			clientIPAddress:    "927.0.0.1",
-			expectedErrorField: types.FieldClientIPAddress,
+			expectedErrorField: maib.FieldClientIPAddress,
 		},
 	}
 	for _, c := range cases {
@@ -185,7 +185,7 @@ func TestWithClientIPAddress(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -196,23 +196,23 @@ func TestWithLanguage(t *testing.T) {
 	tooLongLanguage := strings.Repeat("-", languageMaxLength+1)
 	cases := []struct {
 		name               string
-		language           types.Language
-		expectedErrorField types.PayloadField
+		language           maib.Language
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
-			language:           types.LanguageEnglish,
+			language:           maib.LanguageEnglish,
 			expectedErrorField: "",
 		},
 		{
 			name:               "Too short",
 			language:           "",
-			expectedErrorField: types.FieldLanguage,
+			expectedErrorField: maib.FieldLanguage,
 		},
 		{
 			name:               "too long",
-			language:           types.Language(tooLongLanguage),
-			expectedErrorField: types.FieldLanguage,
+			language:           maib.Language(tooLongLanguage),
+			expectedErrorField: maib.FieldLanguage,
 		},
 	}
 	for _, c := range cases {
@@ -221,7 +221,7 @@ func TestWithLanguage(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -234,7 +234,7 @@ func TestWithBillerClientID(t *testing.T) {
 		name               string
 		billerClientID     string
 		required           bool
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
@@ -252,19 +252,19 @@ func TestWithBillerClientID(t *testing.T) {
 			name:               "Too short",
 			billerClientID:     "",
 			required:           true,
-			expectedErrorField: types.FieldBillerClientID,
+			expectedErrorField: maib.FieldBillerClientID,
 		},
 		{
 			name:               "Too long",
 			billerClientID:     tooLongBillerClientID,
 			required:           true,
-			expectedErrorField: types.FieldBillerClientID,
+			expectedErrorField: maib.FieldBillerClientID,
 		},
 		{
 			name:               "Too long (not required)",
 			billerClientID:     tooLongBillerClientID,
 			required:           false,
-			expectedErrorField: types.FieldBillerClientID,
+			expectedErrorField: maib.FieldBillerClientID,
 		},
 	}
 	for _, c := range cases {
@@ -273,7 +273,7 @@ func TestWithBillerClientID(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -283,7 +283,7 @@ func TestWithPerspayeeExpiry(t *testing.T) {
 	cases := []struct {
 		name               string
 		perspayeeExpiry    string
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
@@ -293,37 +293,37 @@ func TestWithPerspayeeExpiry(t *testing.T) {
 		{
 			name:               "Invalid length",
 			perspayeeExpiry:    "0",
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 		{
 			name:               "Invalid month (not int)",
 			perspayeeExpiry:    "aa01",
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 		{
 			name:               "Invalid month (not positive)",
 			perspayeeExpiry:    "-201",
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 		{
 			name:               "Invalid month (zero)",
 			perspayeeExpiry:    "0001",
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 		{
 			name:               "Invalid month (more than 12)",
 			perspayeeExpiry:    "1301",
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 		{
 			name:               "Invalid year (not int)",
 			perspayeeExpiry:    "12aa",
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 		{
 			name:               "Invalid year (not positive)",
 			perspayeeExpiry:    "12-1",
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 	}
 	for _, c := range cases {
@@ -332,7 +332,7 @@ func TestWithPerspayeeExpiry(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -344,7 +344,7 @@ func TestWithDescription(t *testing.T) {
 	cases := []struct {
 		name               string
 		description        string
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 	}{
 		{
 			name:               "OK",
@@ -359,7 +359,7 @@ func TestWithDescription(t *testing.T) {
 		{
 			name:               "Too long",
 			description:        tooLongDescription,
-			expectedErrorField: types.FieldDescription,
+			expectedErrorField: maib.FieldDescription,
 		},
 	}
 	for _, c := range cases {
@@ -368,7 +368,7 @@ func TestWithDescription(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}
@@ -379,9 +379,9 @@ func Example() {
 		WithTransactionType("a"),
 		WithTransactionID(validTransactionID),
 		WithAmount(1000, true),
-		WithCurrency(types.CurrencyMDL),
+		WithCurrency(maib.CurrencyMDL),
 		WithClientIPAddress("127.0.0.1"),
-		WithLanguage(types.LanguageEnglish),
+		WithLanguage(maib.LanguageEnglish),
 		WithBillerClientID("biller", true),
 		WithPerspayeeExpiry("1224"),
 		WithDescription("description"))

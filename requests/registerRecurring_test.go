@@ -6,14 +6,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 func TestRegisterRecurring(t *testing.T) {
 	cases := []struct {
 		name               string
 		payload            RegisterRecurring
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 		expectedEncoded    string
 	}{
 		{
@@ -21,10 +21,10 @@ func TestRegisterRecurring(t *testing.T) {
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
@@ -36,10 +36,10 @@ func TestRegisterRecurring(t *testing.T) {
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringDMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
@@ -51,10 +51,10 @@ func TestRegisterRecurring(t *testing.T) {
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
@@ -65,10 +65,10 @@ func TestRegisterRecurring(t *testing.T) {
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				PerspayeeExpiry:   "1224",
 				BillerClientID:    "biller",
 				OverwriteExisting: true,
@@ -80,10 +80,10 @@ func TestRegisterRecurring(t *testing.T) {
 			payload: RegisterRecurring{
 				TransactionType: RegisterRecurringSMS,
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
-				Language:        types.LanguageEnglish,
+				Language:        maib.LanguageEnglish,
 				PerspayeeExpiry: "1224",
 				BillerClientID:  "biller",
 				AskSaveCardData: true,
@@ -95,10 +95,10 @@ func TestRegisterRecurring(t *testing.T) {
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringWithoutPayment,
 				Amount:            0,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				PerspayeeExpiry:   "1224",
 				BillerClientID:    "biller",
 				OverwriteExisting: false,
@@ -110,30 +110,30 @@ func TestRegisterRecurring(t *testing.T) {
 			payload: RegisterRecurring{
 				TransactionType:   -9,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldCommand,
+			expectedErrorField: maib.FieldCommand,
 		},
 		{
 			name: "Amount invalid",
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            0,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldAmount,
+			expectedErrorField: maib.FieldAmount,
 		},
 		{
 			name: "Currency invalid",
@@ -143,49 +143,49 @@ func TestRegisterRecurring(t *testing.T) {
 				Currency:          1000,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldCurrency,
+			expectedErrorField: maib.FieldCurrency,
 		},
 		{
 			name: "ClientIPAddress invalid",
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "927.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldClientIPAddress,
+			expectedErrorField: maib.FieldClientIPAddress,
 		},
 		{
 			name: "Description invalid",
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       strings.Repeat("-", 130),
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldDescription,
+			expectedErrorField: maib.FieldDescription,
 		},
 		{
 			name: "Language invalid",
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
 				Language:          "",
@@ -193,22 +193,22 @@ func TestRegisterRecurring(t *testing.T) {
 				PerspayeeExpiry:   "1224",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldLanguage,
+			expectedErrorField: maib.FieldLanguage,
 		},
 		{
 			name: "PerspayeeExpiry invalid",
 			payload: RegisterRecurring{
 				TransactionType:   RegisterRecurringSMS,
 				Amount:            1234,
-				Currency:          types.CurrencyMDL,
+				Currency:          maib.CurrencyMDL,
 				ClientIPAddress:   "127.0.0.1",
 				Description:       "Description",
-				Language:          types.LanguageEnglish,
+				Language:          maib.LanguageEnglish,
 				BillerClientID:    "biller",
 				PerspayeeExpiry:   "wrong",
 				OverwriteExisting: false,
 			},
-			expectedErrorField: types.FieldPerspayeeExpiry,
+			expectedErrorField: maib.FieldPerspayeeExpiry,
 		},
 	}
 	for _, c := range cases {
@@ -220,7 +220,7 @@ func TestRegisterRecurring(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}

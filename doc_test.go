@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/NikSays/go-maib-ecomm/requests"
-	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 // This test file is under doc.go because it provides an example for documentation.
@@ -29,10 +28,10 @@ func Example() {
 	res, _ := client.Send(requests.RegisterTransaction{
 		TransactionType: requests.RegisterTransactionSMS,
 		Amount:          1000,
-		Currency:        types.CurrencyEUR,
+		Currency:        CurrencyEUR,
 		ClientIPAddress: "127.0.0.1",
 		Description:     "10 EUR will be charged",
-		Language:        types.LanguageEnglish,
+		Language:        LanguageEnglish,
 	})
 
 	// Decode response map into RegisterTransactionResult struct,

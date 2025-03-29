@@ -5,8 +5,8 @@ import (
 
 	"github.com/google/go-querystring/query"
 
+	"github.com/NikSays/go-maib-ecomm"
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
-	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 const deleteRecurringCommand = "x"
@@ -20,7 +20,7 @@ type DeleteRecurring struct {
 // DeleteRecurringResult contains the response to a DeleteRecurring request.
 type DeleteRecurringResult struct {
 	// Transaction result status.
-	Result types.ResultEnum `mapstructure:"RESULT"`
+	Result maib.ResultEnum `mapstructure:"RESULT"`
 }
 
 func (payload DeleteRecurring) Values() (url.Values, error) {
