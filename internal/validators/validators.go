@@ -28,7 +28,7 @@ func Validate(validators ...FieldValidator) error {
 func WithTransactionType(transactionType string) FieldValidator {
 	return func() error {
 		if len(transactionType) != 1 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldCommand,
 				Description: "not 1 character",
 			}
@@ -41,13 +41,13 @@ func WithTransactionType(transactionType string) FieldValidator {
 func WithTransactionID(transactionID string) FieldValidator {
 	return func() error {
 		if len(transactionID) != 28 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldTransactionID,
 				Description: "not 28 characters",
 			}
 		}
 		if _, err := base64.StdEncoding.DecodeString(transactionID); err != nil {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldTransactionID,
 				Description: "not in base64",
 			}
@@ -61,12 +61,12 @@ func WithTransactionID(transactionID string) FieldValidator {
 func WithAmount(amount uint, required bool) FieldValidator {
 	return func() error {
 		if amount > 999999999999 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldAmount,
 				Description: "more than 12 digits",
 			}
 		} else if required && amount <= 0 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldAmount,
 				Description: "not a positive number",
 			}
@@ -79,7 +79,7 @@ func WithAmount(amount uint, required bool) FieldValidator {
 func WithCurrency(currency types.Currency) FieldValidator {
 	return func() error {
 		if currency < 0 || currency > 999 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldCurrency,
 				Description: "invalid ISO 4217 3-number code",
 			}
@@ -93,7 +93,7 @@ func WithClientIPAddress(address string) FieldValidator {
 	return func() error {
 		ip := net.ParseIP(address)
 		if ip == nil {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldClientIPAddress,
 				Description: "invalid IP address",
 			}
@@ -106,7 +106,7 @@ func WithClientIPAddress(address string) FieldValidator {
 func WithLanguage(language types.Language) FieldValidator {
 	return func() error {
 		if len(language) < 1 || len(language) > 32 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldLanguage,
 				Description: "not between 1 and 32 characters",
 			}
@@ -119,12 +119,12 @@ func WithLanguage(language types.Language) FieldValidator {
 func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 	return func() error {
 		if len(billerClientID) > 49 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldBillerClientID,
 				Description: "more than 49 characters",
 			}
 		} else if required && len(billerClientID) < 1 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldBillerClientID,
 				Description: "empty string",
 			}
@@ -138,33 +138,33 @@ func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 func WithPerspayeeExpiry(prespayeeExpiry string) FieldValidator {
 	return func() error {
 		if len(prespayeeExpiry) != 4 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldPerspayeeExpiry,
 				Description: "not 4 digits",
 			}
 		}
 		month, err := strconv.Atoi(prespayeeExpiry[0:2])
 		if err != nil {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldPerspayeeExpiry,
 				Description: "not a valid month",
 			}
 		}
 		if month < 1 || month > 12 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldPerspayeeExpiry,
 				Description: "not a valid month",
 			}
 		}
 		year, err := strconv.Atoi(prespayeeExpiry[2:4])
 		if err != nil {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldPerspayeeExpiry,
 				Description: "not a valid year",
 			}
 		}
 		if year < 0 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldPerspayeeExpiry,
 				Description: "not a valid year",
 			}
@@ -177,7 +177,7 @@ func WithPerspayeeExpiry(prespayeeExpiry string) FieldValidator {
 func WithDescription(description string) FieldValidator {
 	return func() error {
 		if len(description) > 125 {
-			return types.ValidationError{
+			return &types.ValidationError{
 				Field:       types.FieldDescription,
 				Description: "more than 125 characters",
 			}

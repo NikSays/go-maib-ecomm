@@ -35,7 +35,7 @@ func TestWithTransactionType(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -72,7 +72,7 @@ func TestWithTransactionID(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -122,7 +122,7 @@ func TestWithAmount(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -156,7 +156,7 @@ func TestWithCurrency(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -185,7 +185,7 @@ func TestWithClientIPAddress(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -221,7 +221,7 @@ func TestWithLanguage(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -273,7 +273,7 @@ func TestWithBillerClientID(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -332,7 +332,7 @@ func TestWithPerspayeeExpiry(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}
@@ -368,7 +368,7 @@ func TestWithDescription(t *testing.T) {
 			if c.expectedErrorField == "" {
 				assert.Nil(t, err)
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
 			}
 		})
 	}

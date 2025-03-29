@@ -14,12 +14,12 @@ type ParseError struct {
 	Body string
 }
 
-func (e ParseError) Error() string {
+func (e *ParseError) Error() string {
 	return fmt.Sprintf("error parsing response: %s", e.Err)
 }
 
 // Unwrap returns the underlying error, for usage with errors.As.
-func (e ParseError) Unwrap() error {
+func (e *ParseError) Unwrap() error {
 	return e.Err
 }
 
@@ -33,7 +33,7 @@ type ECommError struct {
 	Body string
 }
 
-func (e ECommError) Error() string {
+func (e *ECommError) Error() string {
 	return fmt.Sprintf("maib ecomm returned %d: %s", e.Code, e.Body)
 }
 
@@ -47,6 +47,6 @@ type ValidationError struct {
 	Description string
 }
 
-func (e ValidationError) Error() string {
+func (e *ValidationError) Error() string {
 	return fmt.Sprintf("malformed field %s: %s", e.Field, e.Description)
 }

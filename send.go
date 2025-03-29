@@ -46,7 +46,7 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 
 	// Catch error
 	if res.StatusCode != http.StatusOK || strings.HasPrefix(body, "error") {
-		return nil, types.ECommError{
+		return nil, &types.ECommError{
 			Code: res.StatusCode,
 			Body: body,
 		}
@@ -54,7 +54,7 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 
 	result, err := parseBody(body)
 	if err != nil {
-		return nil, types.ParseError{
+		return nil, &types.ParseError{
 			Err:  err,
 			Body: body,
 		}
