@@ -81,7 +81,7 @@ func TestClient_Send_InvalidRequest(t *testing.T) {
 	})
 
 	assert.Nil(t, res)
-	assert.ErrorAs(t, err, &types.ValidationError{})
+	assert.ErrorAs(t, err, new(*types.ValidationError))
 }
 
 func TestClient_Send_InvalidEndpoint(t *testing.T) {
@@ -130,7 +130,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		assert.Nil(t, err)
 
 		_, err = client.Send(requests.CloseDay{})
-		assert.ErrorAs(t, err, &types.ECommError{})
+		assert.ErrorAs(t, err, new(*types.ECommError))
 	})
 
 	t.Run("Error response", func(t *testing.T) {
@@ -143,7 +143,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		assert.Nil(t, err)
 
 		_, err = client.Send(requests.CloseDay{})
-		assert.ErrorAs(t, err, &types.ECommError{})
+		assert.ErrorAs(t, err, new(*types.ECommError))
 	})
 
 	t.Run("Malformed response", func(t *testing.T) {
@@ -156,7 +156,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		assert.Nil(t, err)
 
 		_, err = client.Send(requests.CloseDay{})
-		assert.ErrorAs(t, err, &types.ParseError{})
+		assert.ErrorAs(t, err, new(*types.ParseError))
 	})
 }
 
