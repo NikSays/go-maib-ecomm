@@ -5,8 +5,8 @@ import (
 
 	"github.com/google/go-querystring/query"
 
+	"github.com/NikSays/go-maib-ecomm"
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
-	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 const transactionStatusCommand = "c"
@@ -23,10 +23,10 @@ type TransactionStatus struct {
 // TransactionStatusResult contains the response to a TransactionStatus request.
 type TransactionStatusResult struct {
 	// Transaction result status.
-	Result types.ResultEnum `mapstructure:"RESULT"`
+	Result maib.ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result, Payment Server interpretation.
-	ResultPS types.ResultPSEnum `mapstructure:"RESULT_PS"`
+	ResultPS maib.ResultPSEnum `mapstructure:"RESULT_PS"`
 
 	// Transaction resul code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`

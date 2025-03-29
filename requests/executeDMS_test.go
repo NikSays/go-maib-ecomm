@@ -6,14 +6,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 func TestExecuteDMS(t *testing.T) {
 	cases := []struct {
 		name               string
 		payload            ExecuteDMS
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 		expectedEncoded    string
 	}{
 		{
@@ -21,7 +21,7 @@ func TestExecuteDMS(t *testing.T) {
 			payload: ExecuteDMS{
 				TransactionID:   "abcdefghijklmnopqrstuvwxyz1=",
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
@@ -32,22 +32,22 @@ func TestExecuteDMS(t *testing.T) {
 			payload: ExecuteDMS{
 				TransactionID:   "",
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldTransactionID,
+			expectedErrorField: maib.FieldTransactionID,
 		},
 		{
 			name: "Amount invalid",
 			payload: ExecuteDMS{
 				TransactionID:   "abcdefghijklmnopqrstuvwxyz1=",
 				Amount:          0,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldAmount,
+			expectedErrorField: maib.FieldAmount,
 		},
 		{
 			name: "Currency invalid",
@@ -58,29 +58,29 @@ func TestExecuteDMS(t *testing.T) {
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldCurrency,
+			expectedErrorField: maib.FieldCurrency,
 		},
 		{
 			name: "ClientIPAddress invalid",
 			payload: ExecuteDMS{
 				TransactionID:   "abcdefghijklmnopqrstuvwxyz1=",
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "927.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldClientIPAddress,
+			expectedErrorField: maib.FieldClientIPAddress,
 		},
 		{
 			name: "Description invalid",
 			payload: ExecuteDMS{
 				TransactionID:   "abcdefghijklmnopqrstuvwxyz1=",
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     strings.Repeat("-", 130),
 			},
-			expectedErrorField: types.FieldDescription,
+			expectedErrorField: maib.FieldDescription,
 		},
 	}
 	for _, c := range cases {
@@ -92,7 +92,7 @@ func TestExecuteDMS(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}

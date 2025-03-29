@@ -5,8 +5,8 @@ import (
 
 	"github.com/google/go-querystring/query"
 
+	"github.com/NikSays/go-maib-ecomm"
 	"github.com/NikSays/go-maib-ecomm/internal/validators"
-	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 const executeDMSCommand = "t"
@@ -23,7 +23,7 @@ type ExecuteDMS struct {
 	Amount uint `url:"amount"`
 
 	// Transaction currency in ISO4217 3 digit format.
-	Currency types.Currency `url:"currency"`
+	Currency maib.Currency `url:"currency"`
 
 	// Client's IP address in quad-dotted notation, like "127.0.0.1".
 	ClientIPAddress string `url:"client_ip_addr"`
@@ -35,7 +35,7 @@ type ExecuteDMS struct {
 // ExecuteDMSResult contains the response to a ExecuteDMS request.
 type ExecuteDMSResult struct {
 	// Transaction result status.
-	Result types.ResultEnum `mapstructure:"RESULT"`
+	Result maib.ResultEnum `mapstructure:"RESULT"`
 
 	// Transaction result code returned from Card Suite FO (3 digits).
 	ResultCode int `mapstructure:"RESULT_CODE"`

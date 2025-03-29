@@ -7,8 +7,6 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-
-	"github.com/NikSays/go-maib-ecomm/types"
 )
 
 // Send validates a [Request], and sends it to the ECommerce system.
@@ -46,7 +44,7 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 
 	// Catch error
 	if res.StatusCode != http.StatusOK || strings.HasPrefix(body, "error") {
-		return nil, &types.ECommError{
+		return nil, &ECommError{
 			Code: res.StatusCode,
 			Body: body,
 		}
@@ -54,7 +52,7 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 
 	result, err := parseBody(body)
 	if err != nil {
-		return nil, &types.ParseError{
+		return nil, &ParseError{
 			Err:  err,
 			Body: body,
 		}
@@ -101,4 +99,37 @@ func parseField(key string, value string) (any, error) {
 		return parsed, err
 	}
 	return value, nil
+}
+
+// ParseError is returned when the response from the ECommerce system
+// doesn't follow "KEY: value" format, or when a field has an unexpected type .
+type ParseError struct {
+	// Underlying error
+	Err error
+
+	// Response body that couldn't be parsed
+	Body string
+}
+
+func (e *ParseError) Error() string {
+	return fmt.Sprintf("error parsing response: %s", e.Err)
+}
+
+// Unwrap returns the underlying error, for usage with errors.As.
+func (e *ParseError) Unwrap() error {
+	return e.Err
+}
+
+// ECommError is returned when the ECommerce system responds with
+// a non-200 status, or when the response body starts with "error:".
+type ECommError struct {
+	// HTTP status code
+	Code int
+
+	// Response body
+	Body string
+}
+
+func (e *ECommError) Error() string {
+	return fmt.Sprintf("maib ecomm returned %d: %s", e.Code, e.Body)
 }

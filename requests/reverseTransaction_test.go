@@ -5,14 +5,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 func TestReverseTransaction(t *testing.T) {
 	cases := []struct {
 		name               string
 		payload            ReverseTransaction
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 		expectedEncoded    string
 	}{
 		{
@@ -40,7 +40,7 @@ func TestReverseTransaction(t *testing.T) {
 				Amount:         1234,
 				SuspectedFraud: false,
 			},
-			expectedErrorField: types.FieldTransactionID,
+			expectedErrorField: maib.FieldTransactionID,
 		},
 		{
 			name: "Amount invalid",
@@ -49,7 +49,7 @@ func TestReverseTransaction(t *testing.T) {
 				Amount:         0,
 				SuspectedFraud: false,
 			},
-			expectedErrorField: types.FieldAmount,
+			expectedErrorField: maib.FieldAmount,
 		},
 	}
 	for _, c := range cases {
@@ -61,7 +61,7 @@ func TestReverseTransaction(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}

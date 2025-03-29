@@ -5,14 +5,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 func TestExecuteRecurring(t *testing.T) {
 	cases := []struct {
 		name               string
 		payload            ExecuteRecurring
-		expectedErrorField types.PayloadField
+		expectedErrorField maib.PayloadField
 		expectedEncoded    string
 	}{
 		{
@@ -20,7 +20,7 @@ func TestExecuteRecurring(t *testing.T) {
 			payload: ExecuteRecurring{
 				BillerClientID:  "abcdefghijklmnopqrstuvwxyz1=",
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
@@ -31,22 +31,22 @@ func TestExecuteRecurring(t *testing.T) {
 			payload: ExecuteRecurring{
 				BillerClientID:  "",
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldBillerClientID,
+			expectedErrorField: maib.FieldBillerClientID,
 		},
 		{
 			name: "Amount invalid",
 			payload: ExecuteRecurring{
 				BillerClientID:  "abcdefghijklmnopqrstuvwxyz1=",
 				Amount:          0,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldAmount,
+			expectedErrorField: maib.FieldAmount,
 		},
 		{
 			name: "Currency invalid",
@@ -57,18 +57,18 @@ func TestExecuteRecurring(t *testing.T) {
 				ClientIPAddress: "127.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldCurrency,
+			expectedErrorField: maib.FieldCurrency,
 		},
 		{
 			name: "ClientIPAddress invalid",
 			payload: ExecuteRecurring{
 				BillerClientID:  "abcdefghijklmnopqrstuvwxyz1=",
 				Amount:          1234,
-				Currency:        types.CurrencyMDL,
+				Currency:        maib.CurrencyMDL,
 				ClientIPAddress: "927.0.0.1",
 				Description:     "Description",
 			},
-			expectedErrorField: types.FieldClientIPAddress,
+			expectedErrorField: maib.FieldClientIPAddress,
 		},
 	}
 	for _, c := range cases {
@@ -80,7 +80,7 @@ func TestExecuteRecurring(t *testing.T) {
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*types.ValidationError).Field)
+				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
 			}
 		})
 	}

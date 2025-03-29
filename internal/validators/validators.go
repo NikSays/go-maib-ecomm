@@ -6,7 +6,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/NikSays/go-maib-ecomm/types"
+	"github.com/NikSays/go-maib-ecomm"
 )
 
 // FieldValidator is the function used as argument to [Validate].
@@ -28,8 +28,8 @@ func Validate(validators ...FieldValidator) error {
 func WithTransactionType(transactionType string) FieldValidator {
 	return func() error {
 		if len(transactionType) != 1 {
-			return &types.ValidationError{
-				Field:       types.FieldCommand,
+			return &maib.ValidationError{
+				Field:       maib.FieldCommand,
 				Description: "not 1 character",
 			}
 		}
@@ -41,14 +41,14 @@ func WithTransactionType(transactionType string) FieldValidator {
 func WithTransactionID(transactionID string) FieldValidator {
 	return func() error {
 		if len(transactionID) != 28 {
-			return &types.ValidationError{
-				Field:       types.FieldTransactionID,
+			return &maib.ValidationError{
+				Field:       maib.FieldTransactionID,
 				Description: "not 28 characters",
 			}
 		}
 		if _, err := base64.StdEncoding.DecodeString(transactionID); err != nil {
-			return &types.ValidationError{
-				Field:       types.FieldTransactionID,
+			return &maib.ValidationError{
+				Field:       maib.FieldTransactionID,
 				Description: "not in base64",
 			}
 		}
@@ -61,13 +61,13 @@ func WithTransactionID(transactionID string) FieldValidator {
 func WithAmount(amount uint, required bool) FieldValidator {
 	return func() error {
 		if amount > 999999999999 {
-			return &types.ValidationError{
-				Field:       types.FieldAmount,
+			return &maib.ValidationError{
+				Field:       maib.FieldAmount,
 				Description: "more than 12 digits",
 			}
 		} else if required && amount <= 0 {
-			return &types.ValidationError{
-				Field:       types.FieldAmount,
+			return &maib.ValidationError{
+				Field:       maib.FieldAmount,
 				Description: "not a positive number",
 			}
 		}
@@ -76,11 +76,11 @@ func WithAmount(amount uint, required bool) FieldValidator {
 }
 
 // WithCurrency verifies that currency is a 3 digit non-negative integer.
-func WithCurrency(currency types.Currency) FieldValidator {
+func WithCurrency(currency maib.Currency) FieldValidator {
 	return func() error {
 		if currency < 0 || currency > 999 {
-			return &types.ValidationError{
-				Field:       types.FieldCurrency,
+			return &maib.ValidationError{
+				Field:       maib.FieldCurrency,
 				Description: "invalid ISO 4217 3-number code",
 			}
 		}
@@ -93,8 +93,8 @@ func WithClientIPAddress(address string) FieldValidator {
 	return func() error {
 		ip := net.ParseIP(address)
 		if ip == nil {
-			return &types.ValidationError{
-				Field:       types.FieldClientIPAddress,
+			return &maib.ValidationError{
+				Field:       maib.FieldClientIPAddress,
 				Description: "invalid IP address",
 			}
 		}
@@ -103,11 +103,11 @@ func WithClientIPAddress(address string) FieldValidator {
 }
 
 // WithLanguage verifies that language is a non-empty string, with at most 32 characters.
-func WithLanguage(language types.Language) FieldValidator {
+func WithLanguage(language maib.Language) FieldValidator {
 	return func() error {
 		if len(language) < 1 || len(language) > 32 {
-			return &types.ValidationError{
-				Field:       types.FieldLanguage,
+			return &maib.ValidationError{
+				Field:       maib.FieldLanguage,
 				Description: "not between 1 and 32 characters",
 			}
 		}
@@ -119,13 +119,13 @@ func WithLanguage(language types.Language) FieldValidator {
 func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 	return func() error {
 		if len(billerClientID) > 49 {
-			return &types.ValidationError{
-				Field:       types.FieldBillerClientID,
+			return &maib.ValidationError{
+				Field:       maib.FieldBillerClientID,
 				Description: "more than 49 characters",
 			}
 		} else if required && len(billerClientID) < 1 {
-			return &types.ValidationError{
-				Field:       types.FieldBillerClientID,
+			return &maib.ValidationError{
+				Field:       maib.FieldBillerClientID,
 				Description: "empty string",
 			}
 		}
@@ -138,34 +138,34 @@ func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 func WithPerspayeeExpiry(prespayeeExpiry string) FieldValidator {
 	return func() error {
 		if len(prespayeeExpiry) != 4 {
-			return &types.ValidationError{
-				Field:       types.FieldPerspayeeExpiry,
+			return &maib.ValidationError{
+				Field:       maib.FieldPerspayeeExpiry,
 				Description: "not 4 digits",
 			}
 		}
 		month, err := strconv.Atoi(prespayeeExpiry[0:2])
 		if err != nil {
-			return &types.ValidationError{
-				Field:       types.FieldPerspayeeExpiry,
+			return &maib.ValidationError{
+				Field:       maib.FieldPerspayeeExpiry,
 				Description: "not a valid month",
 			}
 		}
 		if month < 1 || month > 12 {
-			return &types.ValidationError{
-				Field:       types.FieldPerspayeeExpiry,
+			return &maib.ValidationError{
+				Field:       maib.FieldPerspayeeExpiry,
 				Description: "not a valid month",
 			}
 		}
 		year, err := strconv.Atoi(prespayeeExpiry[2:4])
 		if err != nil {
-			return &types.ValidationError{
-				Field:       types.FieldPerspayeeExpiry,
+			return &maib.ValidationError{
+				Field:       maib.FieldPerspayeeExpiry,
 				Description: "not a valid year",
 			}
 		}
 		if year < 0 {
-			return &types.ValidationError{
-				Field:       types.FieldPerspayeeExpiry,
+			return &maib.ValidationError{
+				Field:       maib.FieldPerspayeeExpiry,
 				Description: "not a valid year",
 			}
 		}
@@ -177,8 +177,8 @@ func WithPerspayeeExpiry(prespayeeExpiry string) FieldValidator {
 func WithDescription(description string) FieldValidator {
 	return func() error {
 		if len(description) > 125 {
-			return &types.ValidationError{
-				Field:       types.FieldDescription,
+			return &maib.ValidationError{
+				Field:       maib.FieldDescription,
 				Description: "more than 125 characters",
 			}
 		}
