@@ -58,14 +58,19 @@ func WithTransactionID(transactionID string) FieldValidator {
 }
 
 // WithAmount verifies that amount is at most 12 digits; not 0, if required.
-func WithAmount(amount uint, required bool) FieldValidator {
+func WithAmount(amount int, required bool) FieldValidator {
 	return func() error {
-		if amount > 999999999999 {
+		if amount < 0 {
+			return &maib.ValidationError{
+				Field:       maib.FieldAmount,
+				Description: "negative number",
+			}
+		} else if amount > 999999999999 {
 			return &maib.ValidationError{
 				Field:       maib.FieldAmount,
 				Description: "more than 12 digits",
 			}
-		} else if required && amount <= 0 {
+		} else if required && amount == 0 {
 			return &maib.ValidationError{
 				Field:       maib.FieldAmount,
 				Description: "not a positive number",

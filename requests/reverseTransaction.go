@@ -20,7 +20,7 @@ type ReverseTransaction struct {
 	//
 	// For DMS authorizations only full amount can be reversed, i.e., the reversal and authorization
 	// amounts have to match. In other cases, a partial reversal is also available.
-	Amount uint `url:"amount"`
+	Amount int `url:"amount"`
 
 	// A flag indicating that a transaction is being reversed because of suspected fraud.
 	// If this parameter is used, only full reversals are allowed.

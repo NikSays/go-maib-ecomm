@@ -81,7 +81,7 @@ func TestWithTransactionID(t *testing.T) {
 func TestWithAmount(t *testing.T) {
 	cases := []struct {
 		name               string
-		amount             uint
+		amount             int
 		required           bool
 		expectedErrorField maib.PayloadField
 	}{
@@ -98,7 +98,13 @@ func TestWithAmount(t *testing.T) {
 			expectedErrorField: "",
 		},
 		{
-			name:               "Too small",
+			name:               "Negative",
+			amount:             -1,
+			required:           false,
+			expectedErrorField: maib.FieldAmount,
+		},
+		{
+			name:               "Zero but required",
 			amount:             0,
 			required:           true,
 			expectedErrorField: maib.FieldAmount,
