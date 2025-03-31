@@ -11,8 +11,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/NikSays/go-maib-ecomm/requests"
 )
 
 const (
@@ -20,7 +18,27 @@ const (
 
 	serverCertPath = "testdata/certs/server.crt"
 	serverKeyPath  = "testdata/certs/server.key"
+
+	testCommand = "q"
 )
+
+type testRequest struct {
+	isValid bool
+}
+
+func (t testRequest) Values() (url.Values, error) {
+	return map[string][]string{"command": {testCommand}}, nil
+}
+
+func (t testRequest) Validate() error {
+	if !t.isValid {
+		return &ValidationError{
+			Field:       FieldClientIPAddress,
+			Description: "invalid request",
+		}
+	}
+	return nil
+}
 
 func loadCerts() (caPool *x509.CertPool, serverCert tls.Certificate, err error) {
 	// Read CA certificate
@@ -75,9 +93,7 @@ func createTrustingClient(endpointURL string, caPool *x509.CertPool) (*Client, e
 
 func TestClient_Send_InvalidRequest(t *testing.T) {
 	client := Client{}
-	res, err := client.Send(requests.ExecuteDMS{
-		ClientIPAddress: "invalid",
-	})
+	res, err := client.Send(testRequest{false})
 
 	assert.Nil(t, res)
 	assert.ErrorAs(t, err, new(*ValidationError))
@@ -87,7 +103,7 @@ func TestClient_Send_InvalidEndpoint(t *testing.T) {
 	client := Client{
 		merchantHandlerEndpoint: ":",
 	}
-	res, err := client.Send(requests.CloseDay{})
+	res, err := client.Send(testRequest{true})
 
 	var urlErr *url.Error
 	assert.Nil(t, res)
@@ -99,13 +115,13 @@ func TestClient_Send_WithCerts(t *testing.T) {
 
 	t.Run("OK", func(t *testing.T) {
 		server := createServer(caPool, serverCert, func(writer http.ResponseWriter, request *http.Request) {
-			assert.Equal(t, "b", request.FormValue("command"))
+			assert.Equal(t, testCommand, request.FormValue("command"))
 		})
 		server.StartTLS()
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(requests.CloseDay{})
+		_, err = client.Send(testRequest{true})
 		assert.Nil(t, err)
 	})
 
@@ -115,7 +131,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, &x509.CertPool{})
 		assert.Nil(t, err)
 
-		_, err = client.Send(requests.CloseDay{})
+		_, err = client.Send(testRequest{true})
 		var certErr *tls.CertificateVerificationError
 		assert.ErrorAs(t, err, &certErr)
 	})
@@ -128,7 +144,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(requests.CloseDay{})
+		_, err = client.Send(testRequest{true})
 		assert.ErrorAs(t, err, new(*ECommError))
 	})
 
@@ -141,7 +157,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(requests.CloseDay{})
+		_, err = client.Send(testRequest{true})
 		assert.ErrorAs(t, err, new(*ECommError))
 	})
 
@@ -154,84 +170,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(requests.CloseDay{})
+		_, err = client.Send(testRequest{true})
 		assert.ErrorAs(t, err, new(*ParseError))
 	})
-}
-
-func TestParseBody_OK(t *testing.T) {
-	const (
-		textValue = "TEXT"
-		intValue  = 123
-	)
-	textFields := []string{
-		"RESULT", "RESULT_PS", "3DSECURE",
-		"CARD_NUMBER", "TRANSACTION_ID",
-		"RECC_PMNT_ID", "RECC_PMNT_EXPIRY",
-	}
-
-	intFields := []string{
-		"RESULT_CODE", "RRN",
-		"FLD_074", "FLD_075", "FLD_076", "FLD_077",
-		"FLD_086", "FLD_087", "FLD_088", "FLD_089",
-	}
-
-	// Build a MAIB EComm response to parse into map
-	var body string
-	for _, f := range textFields {
-		body += fmt.Sprintf("%s: %s\n", f, textValue)
-	}
-	for _, f := range intFields {
-		body += fmt.Sprintf("%s: %d\n", f, intValue)
-	}
-
-	parsed, err := parseBody(body)
-	assert.Nil(t, err)
-
-	// Verify that all fields have the correct value
-	for _, f := range textFields {
-		assert.Equal(t, textValue, parsed[f])
-	}
-	for _, f := range intFields {
-		assert.Equal(t, intValue, parsed[f])
-	}
-
-	// Try to decode into all results
-	// Prevents datatype inconsistencies
-	_, err = requests.DecodeResponse[requests.CloseDayResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.DeleteRecurringResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.ExecuteDMSResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.ExecuteRecurringResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.RegisterRecurringResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.ExecuteOneClickResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.RegisterOneClickResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.RegisterTransactionResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.ReverseTransactionResult](parsed)
-	assert.Nil(t, err)
-	_, err = requests.DecodeResponse[requests.TransactionStatusResult](parsed)
-	assert.Nil(t, err)
-}
-
-func TestParseBody_MalformedLine(t *testing.T) {
-	body := "No colon"
-	parsed, err := parseBody(body)
-
-	assert.Nil(t, parsed)
-	assert.NotNil(t, err)
-}
-
-func TestParseBody_InvalidType(t *testing.T) {
-	body := "RESULT_CODE: TEXT"
-	parsed, err := parseBody(body)
-
-	assert.Nil(t, parsed)
-	assert.NotNil(t, err)
 }
