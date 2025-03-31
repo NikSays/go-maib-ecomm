@@ -3,10 +3,10 @@ package maib
 import (
 	"fmt"
 
-	"github.com/NikSays/go-maib-ecomm/requests"
+	// Since the real requests package imports the current package,
+	// a fake requests package must be used. Otherwise, an import cycle is created.
+	requests "github.com/NikSays/go-maib-ecomm/testdata/fakerequests"
 )
-
-// This test file is under doc.go because it provides an example for documentation.
 
 func Example() {
 	// In this example we will
