@@ -15,30 +15,30 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 	// Validate request
 	err := req.Validate()
 	if err != nil {
-		return nil, fmt.Errorf("error validating request: %w", err)
+		return nil, fmt.Errorf("validate request: %w", err)
 	}
 
 	// Send request
 	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing url: %w", err)
+		return nil, fmt.Errorf("parse url: %w", err)
 	}
 
 	queryValues, err := req.Values()
 	if err != nil {
-		return nil, fmt.Errorf("error encoding request: %w", err)
+		return nil, fmt.Errorf("encode request: %w", err)
 	}
 	reqURL.RawQuery = queryValues.Encode()
 	res, err := c.httpClient.Post(reqURL.String(), "", nil)
 	if err != nil {
-		return nil, fmt.Errorf("error sending request to MAIB EComm: %w", err)
+		return nil, fmt.Errorf("send request to MAIB EComm: %w", err)
 	}
 
 	// Read body
 	defer res.Body.Close()
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %w", err)
+		return nil, fmt.Errorf("read response body: %w", err)
 	}
 	body := string(bodyBytes)
 
@@ -112,7 +112,7 @@ type ParseError struct {
 }
 
 func (e *ParseError) Error() string {
-	return fmt.Sprintf("error parsing response: %s", e.Err)
+	return fmt.Sprintf("parse response: %s", e.Err)
 }
 
 // Unwrap returns the underlying error, for usage with errors.As.

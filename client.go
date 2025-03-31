@@ -59,12 +59,12 @@ func NewClient(config Config) (*Client, error) {
 	// Read pfx certificate
 	pfxBytes, err := os.ReadFile(config.PFXPath)
 	if err != nil {
-		return nil, fmt.Errorf("error reading certificate: %w", err)
+		return nil, fmt.Errorf("read certificate: %w", err)
 	}
 	// Decode certificate
 	privateKey, certificate, caArray, err := pkcs12.DecodeChain(pfxBytes, config.Passphrase)
 	if err != nil {
-		return nil, fmt.Errorf("error loading certificate: %w", err)
+		return nil, fmt.Errorf("load certificate: %w", err)
 	}
 	// Parse CAs
 	caPool := x509.NewCertPool()
@@ -91,7 +91,7 @@ func NewClient(config Config) (*Client, error) {
 	// Parse merchantHandlerEndpoint to check for malformed URL before any actual requests
 	_, err = url.Parse(config.MerchantHandlerEndpoint)
 	if err != nil {
-		return nil, fmt.Errorf("error parsing merchant handler endpoint: %w", err)
+		return nil, fmt.Errorf("parse merchant handler endpoint: %w", err)
 	}
 
 	return &Client{
