@@ -1,6 +1,7 @@
 package maib
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -106,6 +108,15 @@ func TestClient_Send_InvalidEndpoint(t *testing.T) {
 	assert.Nil(t, res)
 	assert.ErrorAs(t, err, &urlErr)
 }
+
+func TestClient_Send_InvalidContext(t *testing.T) {
+	client := Client{}
+	res, err := client.SendWithContext(nil, testRequest{true})
+
+	assert.Nil(t, res)
+	assert.Error(t, err)
+}
+
 func TestClient_Send_WithCerts(t *testing.T) {
 	caPool, serverCert, err := loadCerts()
 	assert.Nil(t, err)
@@ -169,5 +180,21 @@ func TestClient_Send_WithCerts(t *testing.T) {
 
 		_, err = client.Send(testRequest{true})
 		assert.ErrorAs(t, err, new(*ParseError))
+	})
+
+	t.Run("Timeout", func(t *testing.T) {
+		const timeout = 1 * time.Second
+		server := createServer(caPool, serverCert, func(writer http.ResponseWriter, request *http.Request) {
+			time.Sleep(2 * timeout)
+		})
+		server.StartTLS()
+		client, err := createTrustingClient(server.URL, caPool)
+		assert.Nil(t, err)
+
+		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		defer cancel()
+
+		_, err = client.SendWithContext(ctx, testRequest{true})
+		assert.ErrorIs(t, err, context.DeadlineExceeded)
 	})
 }

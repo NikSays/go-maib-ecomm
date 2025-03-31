@@ -1,6 +1,7 @@
 package maib
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -15,9 +16,18 @@ type Request interface {
 	Values() (url.Values, error)
 }
 
-// Send validates a [Request], and sends it to the ECommerce system.
-// The value returned on success can be parsed into a result struct using requests.DecodeResponse
+// Send wraps [Client.SendWithContext] using [context.Background].
 func (c *Client) Send(req Request) (map[string]any, error) {
+	return c.SendWithContext(context.Background(), req)
+}
+
+// SendWithContext validates a [Request] and sends it to the ECommerce system.
+// The value returned on success can be parsed into a result struct using requests.DecodeResponse.
+//
+// The request is cancelled when the context is done. This is not recommended for transactions that immediately transfer
+// money, like ExecuteRecurring. The context may be cancelled when the request was already executed by MAIB, but before
+// the body was read. For such requests, use [Client.Send] or an infinite context.
+func (c *Client) SendWithContext(ctx context.Context, req Request) (map[string]any, error) {
 	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("parse url: %w", err)
@@ -28,7 +38,12 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 		return nil, fmt.Errorf("get request values: %w", err)
 	}
 	reqURL.RawQuery = queryValues.Encode()
-	res, err := c.httpClient.Post(reqURL.String(), "", nil)
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, reqURL.String(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("create request: %w", err)
+	}
+
+	res, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return nil, fmt.Errorf("send request to MAIB EComm: %w", err)
 	}
