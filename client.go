@@ -11,20 +11,13 @@ import (
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// Sender allows sending requests to the MAIB ECommerce system.
+// Client allows sending requests to the MAIB ECommerce system. It uses HTTPS
+// with mutual TLS to communicate with the MAIB ECommerce system. It is safe for
+// concurrent use.
 //
-// This interface is makes it easy to substitute [Client]
-// with a different behavior. E.g. using a mock for testing.
-//
-// Send validates the [Request] before sending it, and checks the response
-// for errors. The response is then parsed into a map that can be decoded
-// into a result struct using requests.DecodeResponse.
-type Sender interface {
-	Send(req Request) (map[string]any, error)
-}
-
-// Client is a [Sender] that uses HTTPS with mutual TLS to communicate
-// with the MAIB ECommerce system. It is safe for concurrent use.
+// Client validates the [Request] before sending it, and checks the response for
+// errors. The response is then parsed into a map that can be decoded into a
+// result struct using requests.DecodeResponse.
 //
 // Must be initiated with [NewClient].
 type Client struct {
