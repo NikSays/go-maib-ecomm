@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/google/go-querystring/query"
@@ -37,20 +38,22 @@ type ReverseTransactionResult struct {
 }
 
 func (payload ReverseTransaction) Values() (url.Values, error) {
+	err := validators.Validate(
+		validators.WithTransactionID(payload.TransactionID),
+		validators.WithAmount(payload.Amount, true),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("validate request: %w", err)
+	}
+
 	v, err := query.Values(payload)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("encode request: %w", err)
 	}
+
 	if payload.SuspectedFraud {
 		v.Set("suspected_fraud", "yes")
 	}
 	v.Set("command", reverseTransactionCommand)
 	return v, nil
-}
-
-func (payload ReverseTransaction) Validate() error {
-	return validators.Validate(
-		validators.WithTransactionID(payload.TransactionID),
-		validators.WithAmount(payload.Amount, true),
-	)
 }

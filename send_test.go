@@ -27,17 +27,14 @@ type testRequest struct {
 }
 
 func (t testRequest) Values() (url.Values, error) {
-	return map[string][]string{"command": {testCommand}}, nil
-}
-
-func (t testRequest) Validate() error {
-	if !t.isValid {
-		return &ValidationError{
+	if t.isValid {
+		return map[string][]string{"command": {testCommand}}, nil
+	} else {
+		return nil, &ValidationError{
 			Field:       FieldClientIPAddress,
 			Description: "invalid request",
 		}
 	}
-	return nil
 }
 
 func loadCerts() (caPool *x509.CertPool, serverCert tls.Certificate, err error) {

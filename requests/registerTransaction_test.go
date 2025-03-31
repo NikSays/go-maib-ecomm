@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"errors"
 	"strings"
 	"testing"
 
@@ -126,14 +127,15 @@ func TestRegisterTransaction(t *testing.T) {
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			err := c.payload.Validate()
+			val, err := c.payload.Values()
 			if c.expectedErrorField == "" {
-				assert.Nil(t, err)
-				val, err := c.payload.Values()
 				assert.Nil(t, err)
 				assert.Equal(t, c.expectedEncoded, val.Encode())
 			} else {
-				assert.Equal(t, c.expectedErrorField, err.(*maib.ValidationError).Field)
+				valErr := &maib.ValidationError{}
+				isValErr := errors.As(err, &valErr)
+				assert.True(t, isValErr)
+				assert.Equal(t, c.expectedErrorField, valErr.Field)
 			}
 		})
 	}

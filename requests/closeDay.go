@@ -52,7 +52,3 @@ func (CloseDay) Values() (url.Values, error) {
 	v.Set("command", closeDayCommand)
 	return v, nil
 }
-
-func (CloseDay) Validate() error {
-	return nil
-}

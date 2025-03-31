@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/google/go-querystring/query"
@@ -52,20 +53,22 @@ type ExecuteRecurringResult struct {
 }
 
 func (payload ExecuteRecurring) Values() (url.Values, error) {
-	v, err := query.Values(payload)
-	if err != nil {
-		return nil, err
-	}
-	v.Set("command", executeRecurringCommand)
-	return v, nil
-}
-
-func (payload ExecuteRecurring) Validate() error {
-	return validators.Validate(
+	err := validators.Validate(
 		validators.WithAmount(payload.Amount, true),
 		validators.WithCurrency(payload.Currency),
 		validators.WithClientIPAddress(payload.ClientIPAddress),
 		validators.WithDescription(payload.Description),
 		validators.WithBillerClientID(payload.BillerClientID, true),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("validate request: %w", err)
+	}
+
+	v, err := query.Values(payload)
+	if err != nil {
+		return nil, fmt.Errorf("encode request: %w", err)
+	}
+
+	v.Set("command", executeRecurringCommand)
+	return v, nil
 }

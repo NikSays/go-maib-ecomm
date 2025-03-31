@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/google/go-querystring/query"
@@ -24,16 +25,18 @@ type DeleteRecurringResult struct {
 }
 
 func (payload DeleteRecurring) Values() (url.Values, error) {
-	v, err := query.Values(payload)
-	if err != nil {
-		return nil, err
-	}
-	v.Set("command", deleteRecurringCommand)
-	return v, nil
-}
-
-func (payload DeleteRecurring) Validate() error {
-	return validators.Validate(
+	err := validators.Validate(
 		validators.WithBillerClientID(payload.BillerClientID, true),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("validate request: %w", err)
+	}
+
+	v, err := query.Values(payload)
+	if err != nil {
+		return nil, fmt.Errorf("encode request: %w", err)
+	}
+
+	v.Set("command", deleteRecurringCommand)
+	return v, nil
 }
