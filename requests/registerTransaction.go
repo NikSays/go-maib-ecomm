@@ -47,7 +47,7 @@ type RegisterTransaction struct {
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
 	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from the client's card.
-	Amount uint `url:"amount"`
+	Amount int `url:"amount"`
 
 	// Transaction currency in ISO4217 3 digit format.
 	Currency maib.Currency `url:"currency"`
