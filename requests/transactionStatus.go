@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/google/go-querystring/query"
@@ -60,17 +61,19 @@ type TransactionStatusResult struct {
 }
 
 func (payload TransactionStatus) Values() (url.Values, error) {
-	v, err := query.Values(payload)
-	if err != nil {
-		return nil, err
-	}
-	v.Set("command", transactionStatusCommand)
-	return v, nil
-}
-
-func (payload TransactionStatus) Validate() error {
-	return validators.Validate(
+	err := validators.Validate(
 		validators.WithTransactionID(payload.TransactionID),
 		validators.WithClientIPAddress(payload.ClientIPAddress),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("validate request: %w", err)
+	}
+
+	v, err := query.Values(payload)
+	if err != nil {
+		return nil, fmt.Errorf("encode request: %w", err)
+	}
+
+	v.Set("command", transactionStatusCommand)
+	return v, nil
 }

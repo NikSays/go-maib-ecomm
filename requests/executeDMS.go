@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/google/go-querystring/query"
@@ -51,20 +52,22 @@ type ExecuteDMSResult struct {
 }
 
 func (payload ExecuteDMS) Values() (url.Values, error) {
-	v, err := query.Values(payload)
-	if err != nil {
-		return nil, err
-	}
-	v.Set("command", executeDMSCommand)
-	return v, nil
-}
-
-func (payload ExecuteDMS) Validate() error {
-	return validators.Validate(
+	err := validators.Validate(
 		validators.WithTransactionID(payload.TransactionID),
 		validators.WithAmount(payload.Amount, true),
 		validators.WithCurrency(payload.Currency),
 		validators.WithClientIPAddress(payload.ClientIPAddress),
 		validators.WithDescription(payload.Description),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("validate request: %w", err)
+	}
+
+	v, err := query.Values(payload)
+	if err != nil {
+		return nil, fmt.Errorf("encode request: %w", err)
+	}
+
+	v.Set("command", executeDMSCommand)
+	return v, nil
 }

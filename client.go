@@ -11,17 +11,6 @@ import (
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// Request is a payload that can be sent to the ECommerce system.
-type Request interface {
-	// Values returns the payload as a URL value map,
-	// that can be encoded into a querystring to be sent to the ECommerce system.
-	Values() (url.Values, error)
-
-	// Validate goes through the fields of the payload, and returns an error
-	// if any one of them does not fit the requirements.
-	Validate() error
-}
-
 // Sender allows sending requests to the MAIB ECommerce system.
 //
 // This interface is makes it easy to substitute [Client]

@@ -8,16 +8,16 @@ import (
 	"strings"
 )
 
+// Request is a payload that can be sent to the ECommerce system.
+type Request interface {
+	// Values validates the request and returns the payload as a URL value map, that
+	// can be encoded into a querystring to be sent to the ECommerce system.
+	Values() (url.Values, error)
+}
+
 // Send validates a [Request], and sends it to the ECommerce system.
 // The value returned on success can be parsed into a result struct using requests.DecodeResponse
 func (c *Client) Send(req Request) (map[string]any, error) {
-	// Validate request
-	err := req.Validate()
-	if err != nil {
-		return nil, fmt.Errorf("validate request: %w", err)
-	}
-
-	// Send request
 	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("parse url: %w", err)
@@ -25,7 +25,7 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 
 	queryValues, err := req.Values()
 	if err != nil {
-		return nil, fmt.Errorf("encode request: %w", err)
+		return nil, fmt.Errorf("get request values: %w", err)
 	}
 	reqURL.RawQuery = queryValues.Encode()
 	res, err := c.httpClient.Post(reqURL.String(), "", nil)

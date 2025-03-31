@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/google/go-querystring/query"
@@ -90,9 +91,27 @@ type RegisterRecurringResult struct {
 }
 
 func (payload RegisterRecurring) Values() (url.Values, error) {
+	isAmountRequired := true
+	if payload.TransactionType == RegisterRecurringWithoutPayment {
+		isAmountRequired = false
+	}
+	err := validators.Validate(
+		validators.WithTransactionType(payload.TransactionType.String()),
+		validators.WithAmount(payload.Amount, isAmountRequired),
+		validators.WithCurrency(payload.Currency),
+		validators.WithClientIPAddress(payload.ClientIPAddress),
+		validators.WithDescription(payload.Description),
+		validators.WithLanguage(payload.Language),
+		validators.WithBillerClientID(payload.BillerClientID, false),
+		validators.WithPerspayeeExpiry(payload.PerspayeeExpiry),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("validate request: %w", err)
+	}
+
 	v, err := query.Values(payload)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("encode request: %w", err)
 	}
 
 	if payload.AskSaveCardData {
@@ -111,21 +130,4 @@ func (payload RegisterRecurring) Values() (url.Values, error) {
 	}
 	v.Set("command", payload.TransactionType.String())
 	return v, nil
-}
-
-func (payload RegisterRecurring) Validate() error {
-	isAmountRequired := true
-	if payload.TransactionType == RegisterRecurringWithoutPayment {
-		isAmountRequired = false
-	}
-	return validators.Validate(
-		validators.WithTransactionType(payload.TransactionType.String()),
-		validators.WithAmount(payload.Amount, isAmountRequired),
-		validators.WithCurrency(payload.Currency),
-		validators.WithClientIPAddress(payload.ClientIPAddress),
-		validators.WithDescription(payload.Description),
-		validators.WithLanguage(payload.Language),
-		validators.WithBillerClientID(payload.BillerClientID, false),
-		validators.WithPerspayeeExpiry(payload.PerspayeeExpiry),
-	)
 }
