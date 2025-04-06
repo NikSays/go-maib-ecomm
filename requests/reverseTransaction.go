@@ -12,23 +12,26 @@ import (
 
 const reverseTransactionCommand = "r"
 
-// ReverseTransaction reverses transaction and returns all or some funds to the client (-r).
+// ReverseTransaction reverses transaction and returns all or some funds to the
+// client (-r).
 type ReverseTransaction struct {
 	// ID of the transaction. 28 symbols in base64.
 	TransactionID string `url:"trans_id"`
 
 	// Reversal amount. Positive integer with last 2 digits being the cents.
 	//
-	// For DMS authorizations only full amount can be reversed, i.e., the reversal and authorization
-	// amounts have to match. In other cases, a partial reversal is also available.
+	// For DMS authorizations only full amount can be reversed, i.e., the reversal
+	// and authorization amounts have to match. In other cases, a partial reversal
+	// is also available.
 	Amount int `url:"amount"`
 
-	// A flag indicating that a transaction is being reversed because of suspected fraud.
-	// If this parameter is used, only full reversals are allowed.
+	// A flag indicating that a transaction is being reversed because of suspected
+	// fraud. If this parameter is used, only full reversals are allowed.
 	SuspectedFraud bool `url:"-"`
 }
 
-// ReverseTransactionResult contains the response to a ReverseTransaction request.
+// ReverseTransactionResult contains the response to a ReverseTransaction
+// request.
 type ReverseTransactionResult struct {
 	// Transaction result status.
 	Result maib.ResultEnum `mapstructure:"RESULT"`

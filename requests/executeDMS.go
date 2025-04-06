@@ -12,15 +12,16 @@ import (
 
 const executeDMSCommand = "t"
 
-// ExecuteDMS executes a DMS transaction (-t) after it was created with [RegisterTransaction] (-a),
-// and checked with [TransactionStatus] (-c).
+// ExecuteDMS executes a DMS transaction (-t) after it was created with
+// [RegisterTransaction] (-a), and checked with [TransactionStatus] (-c).
 type ExecuteDMS struct {
 	// ID of the transaction. 28 symbols in base64.
 	TransactionID string `url:"trans_id"`
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
-	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from the client's card.
+	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from
+	// the client's card.
 	Amount int `url:"amount"`
 
 	// Transaction currency in ISO4217 3 digit format.

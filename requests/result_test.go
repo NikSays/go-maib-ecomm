@@ -11,16 +11,12 @@ import (
 )
 
 func ExampleDecodeResponse() {
-	// Example of a response from the ECommerce system for a RegisterTransaction request
+	// Example of a response from the ECommerce system for a RegisterTransaction request.
 	ecommResponse := map[string]any{
 		"TRANSACTION_ID": "abcdefghijklmnopqrstuvwxyz1=",
 	}
 
-	result, err := DecodeResponse[RegisterTransactionResult](ecommResponse)
-	if err != nil {
-		panic(err)
-	}
-
+	result, _ := DecodeResponse[RegisterTransactionResult](ecommResponse)
 	fmt.Print(result.TransactionID)
 
 	// Output: abcdefghijklmnopqrstuvwxyz1=
@@ -32,7 +28,7 @@ func TestDecodeResponse(t *testing.T) {
 		intValue  = "123"
 	)
 
-	// Read an example MAIB EComm response to parse into map
+	// Read an example MAIB EComm response to parse into map.
 	body, err := os.ReadFile("../testdata/response.txt")
 	assert.Nil(t, err)
 
@@ -56,8 +52,8 @@ func TestDecodeResponse(t *testing.T) {
 		}
 	}
 
-	// Try to decode into all results
-	// Prevents datatype inconsistencies
+	// Try to decode into all results,
+	// Prevents datatype inconsistencies.
 	_, err = DecodeResponse[CloseDayResult](parsed)
 	assert.Nil(t, err)
 	_, err = DecodeResponse[DeleteRecurringResult](parsed)

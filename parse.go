@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// parseBody splits each line as "key: value", converting types
+// parseBody splits each line as "key: value", converting types.
 func parseBody(body string) (map[string]any, error) {
 	result := make(map[string]any)
 	lines := strings.Split(body, "\n")
@@ -31,7 +31,7 @@ func parseBody(body string) (map[string]any, error) {
 	return result, nil
 }
 
-// parseField returns int or string value depending on the key
+// parseField returns int or string value depending on the key.
 func parseField(key string, value string) (any, error) {
 	switch key {
 	// Possible int fields in response
@@ -46,13 +46,13 @@ func parseField(key string, value string) (any, error) {
 	return value, nil
 }
 
-// ParseError is returned when the response from the ECommerce system
-// doesn't follow "KEY: value" format, or when a field has an unexpected type .
+// ParseError is returned when the response from the ECommerce system doesn't
+// follow "KEY: value" format, or when a field has an unexpected type.
 type ParseError struct {
-	// Underlying error
+	// Underlying error.
 	Err error
 
-	// Response body that couldn't be parsed
+	// Response body that couldn't be parsed.
 	Body string
 }
 
@@ -60,7 +60,7 @@ func (e *ParseError) Error() string {
 	return fmt.Sprintf("parse response: %s", e.Err)
 }
 
-// Unwrap returns the underlying error, for usage with errors.As.
+// Unwrap returns the underlying error, for usage with [errors.As].
 func (e *ParseError) Unwrap() error {
 	return e.Err
 }

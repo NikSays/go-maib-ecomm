@@ -12,8 +12,8 @@ import (
 // FieldValidator is the function used as argument to [Validate].
 type FieldValidator func() error
 
-// Validate runs the argument functions until one of them returns an error.
-// Use any of the With... functions as arguments.
+// Validate runs the argument functions until one of them returns an error. Use
+// any of the `With...` functions as arguments.
 func Validate(validators ...FieldValidator) error {
 	for _, v := range validators {
 		err := v()
@@ -24,7 +24,8 @@ func Validate(validators ...FieldValidator) error {
 	return nil
 }
 
-// WithTransactionType verifies that transactionType is exactly one character, and not the default empty value.
+// WithTransactionType verifies that transactionType is exactly one character,
+// and not the default empty value.
 func WithTransactionType(transactionType string) FieldValidator {
 	return func() error {
 		if len(transactionType) != 1 {
@@ -57,7 +58,8 @@ func WithTransactionID(transactionID string) FieldValidator {
 
 }
 
-// WithAmount verifies that amount is at most 12 digits; not 0, if required.
+// WithAmount verifies that amount is not negative; at most 12 digits;
+// not 0, if required.
 func WithAmount(amount int, required bool) FieldValidator {
 	return func() error {
 		if amount < 0 {
@@ -107,7 +109,8 @@ func WithClientIPAddress(address string) FieldValidator {
 	}
 }
 
-// WithLanguage verifies that language is a non-empty string, with at most 32 characters.
+// WithLanguage verifies that language is a non-empty string, with at most
+// 32 characters.
 func WithLanguage(language maib.Language) FieldValidator {
 	return func() error {
 		if len(language) < 1 || len(language) > 32 {
@@ -120,7 +123,8 @@ func WithLanguage(language maib.Language) FieldValidator {
 	}
 }
 
-// WithBillerClientID verifies that billerClientID is at most 49 characters; not empty, if required.
+// WithBillerClientID verifies that billerClientID is at most 49 characters;
+// not empty, if required.
 func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 	return func() error {
 		if len(billerClientID) > 49 {
@@ -138,8 +142,8 @@ func WithBillerClientID(billerClientID string, required bool) FieldValidator {
 	}
 }
 
-// WithPerspayeeExpiry verifies that prespayeeExpiry is 4 characters, first 2 being a number between 1 and 12,
-// second 2 being a non-negative integer.
+// WithPerspayeeExpiry verifies that prespayeeExpiry is 4 characters, first 2
+// being a number between 1 and 12, second 2 being a non-negative integer.
 func WithPerspayeeExpiry(prespayeeExpiry string) FieldValidator {
 	return func() error {
 		if len(prespayeeExpiry) != 4 {
