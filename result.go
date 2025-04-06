@@ -1,6 +1,7 @@
 package maib
 
-// ResultEnum holds the possible values of the RESULT field returned by the ECommerce system.
+// ResultEnum holds the possible values of the RESULT field returned by the
+// ECommerce system.
 type ResultEnum string
 
 const (
@@ -10,7 +11,8 @@ const (
 	// ResultFailed - the transaction has failed.
 	ResultFailed ResultEnum = "FAILED"
 
-	// ResultCreated - the transaction is just registered in the system. Client didn't input their card information yet.
+	// ResultCreated - the transaction is just registered in the system. Client
+	// didn't input their card information yet.
 	ResultCreated ResultEnum = "CREATED"
 
 	// ResultPending - the transaction is not complete yet.
@@ -29,11 +31,13 @@ const (
 	ResultTimeout ResultEnum = "TIMEOUT"
 )
 
-// ResultPSEnum holds the possible values for the RESULT_PS field returned by the ECommerce system.
+// ResultPSEnum holds the possible values for the RESULT_PS field returned by
+// the ECommerce system.
 type ResultPSEnum string
 
 const (
-	// ResultPSActive - the transaction was registered and payment is not completed yet.
+	// ResultPSActive - the transaction was registered and payment is not completed
+	// yet.
 	ResultPSActive ResultPSEnum = "ACTIVE"
 
 	// ResultPSFinished - payment was completed successfully.

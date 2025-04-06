@@ -12,13 +12,14 @@ import (
 
 const executeRecurringCommand = "e"
 
-// ExecuteRecurring executes a recurring transaction (-e) after it was created with
-// [RegisterRecurring] (-z/-d/-p). It should not be finalized with
+// ExecuteRecurring executes a recurring transaction (-e) after it was created
+// with [RegisterRecurring] (-z/-d/-p). It should not be finalized with
 // [TransactionStatus] (-c) or [ExecuteDMS] (-t).
 type ExecuteRecurring struct {
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
-	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from the client's card.
+	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from
+	// the client's card.
 	Amount int `url:"amount"`
 
 	// Transaction currency in ISO4217 3 digit format.

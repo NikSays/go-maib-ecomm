@@ -183,7 +183,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 	})
 
 	t.Run("Timeout", func(t *testing.T) {
-		const timeout = 1 * time.Second
+		const timeout = 100 * time.Millisecond
 		server := createServer(caPool, serverCert, func(writer http.ResponseWriter, request *http.Request) {
 			time.Sleep(2 * timeout)
 		})

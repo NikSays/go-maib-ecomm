@@ -2,8 +2,8 @@ package maib
 
 import "fmt"
 
-// Currency is an alias type for int. Valid values are 3 digit [ISO4217] codes. The most common codes are exported by
-// this package.
+// Currency is an alias type for int. Valid values are 3 digit [ISO4217] codes.
+// The most common codes are exported by this package.
 //
 // [ISO4217]: https://www.six-group.com/en/products-services/financial-information/data-standards.html
 type Currency int
@@ -19,8 +19,9 @@ const (
 	CurrencyUSD Currency = 840
 )
 
-// Language is an alias type for string. Valid values are language identifiers that the merchant has sent to
-// MAIB. The default identifiers are exported by this package.
+// Language is an alias type for string. Valid values are language identifiers
+// that the merchant has sent to MAIB. The default identifiers are exported by
+// this package.
 type Language string
 
 const (
@@ -29,7 +30,8 @@ const (
 	LanguageEnglish  Language = "en"
 )
 
-// PayloadField contains the names of the payload fields. Used in [ValidationError].
+// PayloadField contains the names of the payload fields. Used in
+// [ValidationError].
 type PayloadField string
 
 const (
@@ -44,8 +46,8 @@ const (
 	FieldCommand         PayloadField = "command"
 )
 
-// ValidationError is triggered before sending the request to the
-// ECommerce system, if the request has failed validation.
+// ValidationError is triggered before sending the request to the ECommerce
+// system, if the request has failed validation.
 type ValidationError struct {
 	// Which field is malformed.
 	Field PayloadField

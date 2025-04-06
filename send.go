@@ -22,11 +22,10 @@ func (c *Client) Send(req Request) (map[string]any, error) {
 }
 
 // SendWithContext validates a [Request] and sends it to the ECommerce system.
-// The value returned on success can be parsed into a result struct using requests.DecodeResponse.
+// The value returned on success can be parsed into a result struct using
+// requests.DecodeResponse.
 //
-// The request is cancelled when the context is done. This is not recommended for transactions that immediately transfer
-// money, like ExecuteRecurring. The context may be cancelled when the request was already executed by MAIB, but before
-// the body was read. For such requests, use [Client.Send] or an infinite context.
+// The request is cancelled when the context is done.
 func (c *Client) SendWithContext(ctx context.Context, req Request) (map[string]any, error) {
 	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
 	if err != nil {
@@ -75,13 +74,13 @@ func (c *Client) SendWithContext(ctx context.Context, req Request) (map[string]a
 	return result, nil
 }
 
-// ECommError is returned when the ECommerce system responds with
-// a non-200 status, or when the response body starts with "error:".
+// ECommError is returned when the ECommerce system responds with a non-200
+// status, or when the response body starts with "error:".
 type ECommError struct {
-	// HTTP status code
+	// HTTP status code.
 	Code int
 
-	// Response body
+	// Response body.
 	Body string
 }
 

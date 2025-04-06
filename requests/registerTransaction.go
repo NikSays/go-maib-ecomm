@@ -15,19 +15,20 @@ type RegisterTransactionType int
 
 const (
 	// RegisterTransactionSMS is the Single Messaging System transaction type (-v).
-	// Such a transaction is executed immediately and should be confirmed with TransactionStatus (-c).
+	// Such a transaction is executed immediately and should be confirmed with
+	// TransactionStatus (-c).
 	//
 	// This is the default transaction type.
 	RegisterTransactionSMS RegisterTransactionType = iota
 
 	// RegisterTransactionDMS is the Double Messaging System transaction type (-a).
-	// This transaction should be confirmed with TransactionStatus (-c),
-	// and executed with ExecuteDMS (-t).
+	// This transaction should be confirmed with TransactionStatus (-c), and
+	// executed with ExecuteDMS (-t).
 	RegisterTransactionDMS
 )
 
-// String converts RegisterTransactionType into the ECommerce command.
-// Returns an empty string for unknown values.
+// String converts RegisterTransactionType into the ECommerce command. Returns
+// an empty string for unknown values.
 func (t RegisterTransactionType) String() string {
 	switch t {
 	case RegisterTransactionSMS:
@@ -47,7 +48,8 @@ type RegisterTransaction struct {
 
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
-	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from the client's card.
+	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from
+	// the client's card.
 	Amount int `url:"amount"`
 
 	// Transaction currency in ISO4217 3 digit format.
@@ -63,7 +65,8 @@ type RegisterTransaction struct {
 	Language maib.Language `url:"language"`
 }
 
-// RegisterTransactionResult contains the response to a RegisterTransaction request.
+// RegisterTransactionResult contains the response to a RegisterTransaction
+// request.
 type RegisterTransactionResult struct {
 	// ID of the created transaction. 28 symbols in base64.
 	TransactionID string `mapstructure:"TRANSACTION_ID"`

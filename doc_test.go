@@ -1,10 +1,13 @@
 package maib
 
 import (
+	"context"
+	"errors"
 	"fmt"
+	"time"
 
-	// Since the real requests package imports the current package,
-	// a fake requests package must be used. Otherwise, an import cycle is created.
+	// Since the real requests package imports the current package, a fake requests
+	// package must be used. Otherwise, an import cycle is created.
 	requests "github.com/NikSays/go-maib-ecomm/testdata/fakerequests"
 )
 
@@ -38,10 +41,11 @@ func Example() {
 	// to get the ID of the created transaction.
 	newTransaction, _ := requests.DecodeResponse[requests.RegisterTransactionResult](res)
 
-	// Send a Transaction Status request.
+	// Send a Transaction Status request with a timeout.
 	// Equivalent to this POST request:
 	// command=c&trans_id=<TransactionID>&client_ip_addr=127.0.0.1
-	res, _ = client.Send(requests.TransactionStatus{
+	ctx, _ := context.WithTimeout(context.Background(), time.Minute)
+	res, _ = client.SendWithContext(ctx, requests.TransactionStatus{
 		TransactionID:   newTransaction.TransactionID,
 		ClientIPAddress: "127.0.0.1",
 	})
@@ -52,4 +56,19 @@ func Example() {
 
 	// Print the result of the transaction
 	fmt.Println(status.Result)
+}
+
+func Example_errorHandling() {
+	// Send a request with a client.
+	client, _ := NewClient(Config{ /* ... */ })
+	_, err := client.Send(requests.RegisterTransaction{ /* ... */ })
+
+	// The target of errors.As should be a pointer to a type that implements error.
+	// Since the Error method is defined on *ValidationError, the second argument to
+	// errors.As should be **ValidationError.
+	//
+	// The same principle is used for ECommError and ParseError.
+	if valErr := (&ValidationError{}); errors.As(err, &valErr) {
+		fmt.Printf("Invalid field %s: %s", valErr.Field, valErr.Description)
+	}
 }

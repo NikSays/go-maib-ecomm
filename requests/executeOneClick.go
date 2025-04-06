@@ -12,13 +12,14 @@ import (
 
 const executeOneClickCommand = "f"
 
-// ExecuteOneClick executes a oneClick transaction (-f) after it was created with
-// [RegisterOneClick] (-z/-p with oneclick=Y). It should be finalized with
+// ExecuteOneClick executes a oneClick transaction (-f) after it was created
+// with [RegisterOneClick] (-z/-p with oneclick=Y). It should be finalized with
 // [TransactionStatus] (-c).
 type ExecuteOneClick struct {
 	// Transaction payment amount. Positive integer with last 2 digits being the cents.
 	//
-	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from the client's card.
+	// Example: if Amount:199 and Currency:CurrencyUSD, $1.99 will be requested from
+	// the client's card.
 	Amount int `url:"amount"`
 
 	// Transaction currency in ISO4217 3 digit format.

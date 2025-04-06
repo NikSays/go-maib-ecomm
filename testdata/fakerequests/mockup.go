@@ -1,6 +1,7 @@
 // Package fakerequests is a mockup of the requests package.
-// Without it the main package example would lead to an import cycle,
-// because the real "requests" imports "maib", and the example imports "requests"
+//
+// Without it the main package example would lead to an import cycle, because
+// the real "requests" imports "maib", and the example imports "requests".
 package fakerequests
 
 import (

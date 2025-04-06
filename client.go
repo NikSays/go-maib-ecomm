@@ -11,9 +11,8 @@ import (
 	"software.sslmate.com/src/go-pkcs12"
 )
 
-// Client allows sending requests to the MAIB ECommerce system. It uses HTTPS
-// with mutual TLS to communicate with the MAIB ECommerce system. It is safe for
-// concurrent use.
+// Client allows sending requests to the MAIB ECommerce system using HTTPS with
+// mutual TLS. It is safe for concurrent use.
 //
 // Client validates the [Request] before sending it, and checks the response for
 // errors. The response is then parsed into a map that can be decoded into a
