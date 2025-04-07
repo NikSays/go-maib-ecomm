@@ -8,7 +8,7 @@ import (
 
 	// Since the real requests package imports the current package, a fake requests
 	// package must be used. Otherwise, an import cycle is created.
-	requests "github.com/NikSays/go-maib-ecomm/testdata/fakerequests"
+	requests "github.com/NikSays/go-maib-ecomm/v2/testdata/fakerequests"
 )
 
 func Example() {

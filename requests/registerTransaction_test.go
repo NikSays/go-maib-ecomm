@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/NikSays/go-maib-ecomm"
+	"github.com/NikSays/go-maib-ecomm/v2"
 )
 
 func TestRegisterTransaction(t *testing.T) {
