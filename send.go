@@ -16,17 +16,12 @@ type Request interface {
 	Values() (url.Values, error)
 }
 
-// Send wraps [Client.SendWithContext] using [context.Background].
-func (c *Client) Send(req Request) (map[string]any, error) {
-	return c.SendWithContext(context.Background(), req)
-}
-
-// SendWithContext validates a [Request] and sends it to the ECommerce system.
-// The value returned on success can be parsed into a result struct using
+// Send validates a [Request] and sends it to the ECommerce system. The value
+// returned on success can be parsed into a result struct using
 // requests.DecodeResponse.
 //
 // The request is cancelled when the context is done.
-func (c *Client) SendWithContext(ctx context.Context, req Request) (map[string]any, error) {
+func (c *Client) Send(ctx context.Context, req Request) (map[string]any, error) {
 	reqURL, err := url.Parse(c.merchantHandlerEndpoint)
 	if err != nil {
 		return nil, fmt.Errorf("parse url: %w", err)

@@ -13,9 +13,8 @@ To use this module you should:
 
  1. Use [NewClient] to set up a [Client] that communicates with the MAIB
     ECommerce system.
- 2. Send a [Request] with [Client.Send] or [Client.SendWithContext] (The
-    requests described in the ECommerce documentation are implemented in
-    the `requests` package).
+ 2. Send a [Request] with [Client.Send] (The requests described in the
+    ECommerce documentation are implemented in the `requests` package).
  3. Decode the returned map into a result struct with requests.DecodeResult.
 
 # Error Handling
