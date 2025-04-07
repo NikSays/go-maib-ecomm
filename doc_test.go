@@ -28,7 +28,7 @@ func Example() {
 	// Execute an SMS transaction (-v) for 10 Euro.
 	// Equivalent to this POST request:
 	// command=v&amount=1000&currency=978&language=en&client_ip_addr=127.0.0.1&description=10+EUR+will+be+charged
-	res, _ := client.Send(requests.RegisterTransaction{
+	res, _ := client.Send(context.TODO(), requests.RegisterTransaction{
 		TransactionType: requests.RegisterTransactionSMS,
 		Amount:          1000,
 		Currency:        CurrencyEUR,
@@ -45,7 +45,7 @@ func Example() {
 	// Equivalent to this POST request:
 	// command=c&trans_id=<TransactionID>&client_ip_addr=127.0.0.1
 	ctx, _ := context.WithTimeout(context.Background(), time.Minute)
-	res, _ = client.SendWithContext(ctx, requests.TransactionStatus{
+	res, _ = client.Send(ctx, requests.TransactionStatus{
 		TransactionID:   newTransaction.TransactionID,
 		ClientIPAddress: "127.0.0.1",
 	})
@@ -61,7 +61,7 @@ func Example() {
 func Example_errorHandling() {
 	// Send a request with a client.
 	client, _ := NewClient(Config{ /* ... */ })
-	_, err := client.Send(requests.RegisterTransaction{ /* ... */ })
+	_, err := client.Send(context.TODO(), requests.RegisterTransaction{ /* ... */ })
 
 	// The target of errors.As should be a pointer to a type that implements error.
 	// Since the Error method is defined on *ValidationError, the second argument to

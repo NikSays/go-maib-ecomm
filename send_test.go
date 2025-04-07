@@ -24,6 +24,8 @@ const (
 	testCommand = "q"
 )
 
+var ctx = context.Background()
+
 type testRequest struct {
 	isValid bool
 }
@@ -92,7 +94,7 @@ func createTrustingClient(endpointURL string, caPool *x509.CertPool) (*Client, e
 
 func TestClient_Send_InvalidRequest(t *testing.T) {
 	client := Client{}
-	res, err := client.Send(testRequest{false})
+	res, err := client.Send(ctx, testRequest{false})
 
 	assert.Nil(t, res)
 	assert.ErrorAs(t, err, new(*ValidationError))
@@ -102,7 +104,7 @@ func TestClient_Send_InvalidEndpoint(t *testing.T) {
 	client := Client{
 		merchantHandlerEndpoint: ":",
 	}
-	res, err := client.Send(testRequest{true})
+	res, err := client.Send(ctx, testRequest{true})
 
 	var urlErr *url.Error
 	assert.Nil(t, res)
@@ -111,7 +113,7 @@ func TestClient_Send_InvalidEndpoint(t *testing.T) {
 
 func TestClient_Send_InvalidContext(t *testing.T) {
 	client := Client{}
-	res, err := client.SendWithContext(nil, testRequest{true})
+	res, err := client.Send(nil, testRequest{true})
 
 	assert.Nil(t, res)
 	assert.Error(t, err)
@@ -129,7 +131,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(testRequest{true})
+		_, err = client.Send(ctx, testRequest{true})
 		assert.Nil(t, err)
 	})
 
@@ -139,7 +141,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, &x509.CertPool{})
 		assert.Nil(t, err)
 
-		_, err = client.Send(testRequest{true})
+		_, err = client.Send(ctx, testRequest{true})
 		var certErr *tls.CertificateVerificationError
 		assert.ErrorAs(t, err, &certErr)
 	})
@@ -152,7 +154,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(testRequest{true})
+		_, err = client.Send(ctx, testRequest{true})
 		assert.ErrorAs(t, err, new(*ECommError))
 	})
 
@@ -165,7 +167,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(testRequest{true})
+		_, err = client.Send(ctx, testRequest{true})
 		assert.ErrorAs(t, err, new(*ECommError))
 	})
 
@@ -178,7 +180,7 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		_, err = client.Send(testRequest{true})
+		_, err = client.Send(ctx, testRequest{true})
 		assert.ErrorAs(t, err, new(*ParseError))
 	})
 
@@ -191,10 +193,10 @@ func TestClient_Send_WithCerts(t *testing.T) {
 		client, err := createTrustingClient(server.URL, caPool)
 		assert.Nil(t, err)
 
-		ctx, cancel := context.WithTimeout(context.Background(), timeout)
+		timeoutCtx, cancel := context.WithTimeout(context.Background(), timeout)
 		defer cancel()
 
-		_, err = client.SendWithContext(ctx, testRequest{true})
+		_, err = client.Send(timeoutCtx, testRequest{true})
 		assert.ErrorIs(t, err, context.DeadlineExceeded)
 	})
 }
