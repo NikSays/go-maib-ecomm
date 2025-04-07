@@ -6,7 +6,7 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/NikSays/go-maib-ecomm"
+	"github.com/NikSays/go-maib-ecomm/v2"
 )
 
 // FieldValidator is the function used as argument to [Validate].

@@ -6,8 +6,8 @@ import (
 
 	"github.com/google/go-querystring/query"
 
-	"github.com/NikSays/go-maib-ecomm"
-	"github.com/NikSays/go-maib-ecomm/internal/validators"
+	"github.com/NikSays/go-maib-ecomm/v2"
+	"github.com/NikSays/go-maib-ecomm/v2/internal/validators"
 )
 
 // RegisterOneClickType holds possible types for recurring transaction.
