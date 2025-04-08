@@ -62,6 +62,7 @@ func NewClient(config Config) (*Client, error) {
 	tlsConfig := &tls.Config{
 		ClientCAs:    caPool,
 		Certificates: []tls.Certificate{tlsCertificate},
+		MinVersion:   tls.VersionTLS12,
 	}
 	httpClient := &http.Client{
 		Transport: &http.Transport{
