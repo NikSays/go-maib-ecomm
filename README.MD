@@ -2,7 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/NikSays/go-maib-ecomm.svg)](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm)
 
-    Copyright (C) 2023 Nejintev Nicolai
+    Copyright (C) 2025 Nejintev Nicolai
 
     This library is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -26,6 +26,8 @@ Unlike other implementations, you don't need to run any `openssl` commands to ch
 Only the default `.pfx` pkcs#12 file is needed. 
 
 ## Installation
+
+**Note**: This version is outdated. Consider upgrading to v2 (main branch).
 
 Inside your Go module, run
 ```shell
