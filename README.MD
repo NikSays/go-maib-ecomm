@@ -1,6 +1,6 @@
 # Go MAIB ECommerce SDK
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/NikSays/go-maib-ecomm.svg)](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm)
+[![Go Reference](https://pkg.go.dev/badge/github.com/NikSays/go-maib-ecomm/v2.svg)](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm/v2)
 
     Copyright (C) 2025 Nejintev Nicolai
 
@@ -45,7 +45,7 @@ func main()  {
 
 ## Documentation
 
-Documentation and examples are available at [Go Reference](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm).
+Documentation and examples are available at [Go Reference](https://pkg.go.dev/github.com/NikSays/go-maib-ecomm/v2).
 
 ## Testing
 
